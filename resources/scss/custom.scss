@@ -1,0 +1,46 @@
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    "magenta": #d63384,
+    "cyan":    #0dcaf0,
+    "orange":  #ffa43d,
+  )
+);
+
+@each $color, $value in $theme-colors {
+  .hover-bg-#{$color}:hover {
+    background-color: $value !important;
+    color: $white !important; // make text white on hover for contrast
+  }
+}
+
+// Hover text colors
+@each $color, $value in $theme-colors {
+  .hover-text-#{$color}:hover {
+    color: $value !important;
+  }
+}
+
+/* Desktop (lg and up) → right side */
+@media (min-width: 992px) {
+  .dropdown-mobile-center {
+    left: auto !important;
+    right: 0 !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile (sm/md) → center under button */
+@media (max-width: 991px) {
+  .dropdown-mobile-center {
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+  }
+}
+
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
