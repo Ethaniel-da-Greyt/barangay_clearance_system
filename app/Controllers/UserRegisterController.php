@@ -9,40 +9,63 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class UserRegisterController extends BaseController
 {
-    public function update($id)
+    public function update()
     {
         $user = new RegisterUserModel();
+        $id = $this->request->getPost('id');
         $validation = Services::validation();
 
         $rules = [
             'firstname' => 'required',
             'middle_initial' => 'permit_empty',
             'lastname' => 'required',
-            'photo' => 'permit_empty',
+            'sex' => 'permit_empty',
+            'purok' => 'required',
+            'username' => "permit_empty|is_unique[users.username,id,{$id}]", 
+            'role' => 'required',
+            'photo' => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]|max_size[photo,2048]',
         ];
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        
+        $userFind = $user->where('id', $id)->first();
+        if (!$userFind) {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+
+        $userId = $userFind['user_id'];
+        $path = FCPATH . 'uploads/avatar/' . $userId . '/';
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
         $img = $this->request->getFile('photo');
+        $imgName = $userFind['photo'];
 
         if ($img && $img->isValid() && !$img->hasMoved()) {
             $imgName = $img->getRandomName();
-            $img->move('uploads/', $imgName);
-            $data['photo'] = $imgName; // add photo to update data
+            $img->move($path, $imgName);
         }
 
         $data = [
             'firstname' => $this->request->getPost('firstname'),
             'middle_initial' => $this->request->getPost('middle_initial'),
             'lastname' => $this->request->getPost('lastname'),
+            'sex' => $this->request->getPost('sex'),
+            'purok' => $this->request->getPost('purok'),
+            'username' => $this->request->getPost('username'),
+            'role' => $this->request->getPost('role'),
+            'photo' => $imgName,
         ];
 
         $user->update($id, $data);
-        $find = $user->where('is_deleted', 0)->find($id);
-        return redirect()->back()->with('success', $find->firstname . ' Updated Successfully');
+
+        return redirect()->back()->with('success', $data['firstname'] . ' updated successfully!');
     }
+
 
     public function store()
     {
@@ -106,18 +129,19 @@ class UserRegisterController extends BaseController
     }
 
 
-    public function delete($id)
+    public function delete()
     {
         $user = new RegisterUserModel();
+        $id = $this->request->getPost('id');
         $find = $user->where('is_deleted', 0)->where('id', $id)->first();
 
-        if (!$find) {
+        if ($find) {
             $data['is_deleted'] = 1;
             $user->update($id, $data);
-            return redirect()->back()->with('success', $find->firstname . ' Deleted Successfully');
+            return redirect()->back()->with('success', $find['firstname'] . ' Deleted Successfully');
         }
 
-        return redirect()->back()->with('error', $find->firstname . ' already deleted');
+        return redirect()->back()->with('error', $find['firstname'] . ' already deleted');
     }
 
     public function UserId()
@@ -136,5 +160,23 @@ class UserRegisterController extends BaseController
         }
 
         return $prefix . '-' . $newNumber;
+    }
+
+    public function defaultPassword(){
+        try {
+            $id = $this->request->getPost('id');
+
+            $user = new RegisterUserModel();
+
+            
+            $data['password'] = DEFAULT_PASSWORD;
+            
+            $user->update($id, $data);
+            
+            return redirect()->back()->with('success', 'Default Password Successfully');
+        
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

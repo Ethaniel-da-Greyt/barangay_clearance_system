@@ -22,16 +22,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link fw-bold active text-white" aria-current="page" href="/">Dashboard</a>
+                        <a class="nav-link <?= $this->renderSection('dashboard') ?> text-white" aria-current="page" href="/">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-white" href="/admin/residence">Registered Residents</a>
+                        <a class="nav-link <?= $this->renderSection('residents') ?> text-white" href="/admin/residence">Registered Residents</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-white" href="#">Population</a>
+                        <a class="nav-link <?= $this->renderSection('population') ?> text-white" href="/admin/population">Population</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-white" href="/">List of Fire
+                        <a class="nav-link <?= $this->renderSection('fire_list') ?> text-white" href="/admin/fire-list">List of Fire
                             Incidents</a>
                     </li>
                 </ul>

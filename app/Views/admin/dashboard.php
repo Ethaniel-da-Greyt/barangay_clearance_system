@@ -1,6 +1,7 @@
 <?php $this->extend('layout/layout') ?>
 <?php $this->section('title') ?>Admin<?php $this->endSection() ?>      
 
+<?php $this->section('dashboard') ?>fw-bold active border-bottom border-orange border-2 <?php $this->endSection() ?>      
 <?php $this->section('body') ?>
 <div class="container mt-5">
     <div class="row gap-4 justify-content-center text-center">

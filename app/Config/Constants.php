@@ -14,6 +14,7 @@
  | existing namespaces of App\* namespaced-classes.
  */
 defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
+defined('DEFAULT_PASSWORD') || define('DEFAULT_PASSWORD', password_hash('password123', PASSWORD_DEFAULT));
 
 /*
  | --------------------------------------------------------------------------

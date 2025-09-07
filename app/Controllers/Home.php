@@ -31,4 +31,14 @@ class Home extends BaseController
         $data['search'] = $search;
         return view('admin/residence_view', $data);
     }
+
+    public function population()
+    {
+        return view('admin/population');
+    }
+
+    public function fire_list()
+    {
+        return view('admin/fire_list');
+    }
 }
