@@ -14,23 +14,30 @@ class UserRegister extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true
             ],
-            'user_id'=> [
-                'type'     => 'INT',
+            'user_id' => [
+                'type'     => 'TEXT',
                 'unsigned' => true,
-                'null'     => true,
             ],
             'firstname'        => [
                 'type'       => 'VARCHAR',
                 'constraint' => 100,
             ],
             'middle_initial'   => [
-                'type'       => 'CHAR',
-                'constraint' => 1,
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
                 'null'       => true,
             ],
             'lastname'         => [
                 'type'       => 'VARCHAR',
                 'constraint' => 100,
+            ],
+            'sex'         => [
+                'type'       => 'ENUM',
+                'constraint' => ['M', 'F'],
+            ],
+            'purok'         => [
+                'type'       => 'TEXT',
+                'null' => true,
             ],
             'username'         => [
                 'type'       => 'VARCHAR',
@@ -47,7 +54,7 @@ class UserRegister extends Migration
                 'default'    => 'resident',
             ],
             'photo'            => [
-                'type'       => 'VARCHAR',
+                'type'       => 'TEXT',
                 'constraint' => 255,
                 'null'       => true,
             ],
@@ -69,8 +76,6 @@ class UserRegister extends Migration
         $this->forge->addKey('id', true); // Primary key
 
         // Foreign key: user_id referencing users.id (self-reference)
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
-
         $this->forge->createTable('users');
     }
 
