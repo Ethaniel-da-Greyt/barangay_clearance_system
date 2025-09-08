@@ -5,10 +5,10 @@
 <?php $this->section('body') ?>
 <div class="container">
     <div class="container">
-        <div class="row align-items-center mt-4">
+        <div class="row align-items-center mt-4 border-bottom border-2 border-orange mb-2">
 
             <div class="col-12 col-md-4 mb-2 mb-md-0">
-                <h4 class="text-dark">Population Lists</h4>
+                <h4 class="text-primary">Population Lists (<?= esc($totalPopulation) ?>)</h4>
             </div>
 
             <div class="col-12 col-md-4 mb-2 mb-md-0 d-flex">
@@ -38,7 +38,6 @@
                 </button>
             </div>
         </div>
-        <hr>
     </div>
     <div class="table-responsive">
         <table class="table table-bordered">
@@ -94,7 +93,7 @@
                                             <span class="btn btn-close" data-bs-dismiss="modal"></span>
                                         </div>
 
-                                        <form action="/admin/population/update" method="POST" enctype="multipart/form-data">
+                                        <form action="/admin/population/update" method="POST">
                                             <?= csrf_field() ?>
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" value="<?= esc($resident['id']) ?>">
@@ -111,7 +110,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-6 mb-2">
+                                                    <div class="col-4 mb-2">
                                                         <label for="" class="form-label">M.I. <span
                                                                 class="text-secondary">(Optional)</span></label>
                                                         <input type="text" name="middle_initial"
@@ -119,15 +118,14 @@
                                                             class="form-control">
                                                     </div>
 
-                                                    <div class="col-6 mb-2">
+                                                    <div class="col-4 mb-2">
                                                         <label for="" class="form-label">Suffix<span
                                                                 class="text-secondary">(Optional)</span></label>
                                                         <input type="text" name="suffix"
                                                             value="<?= $resident['suffix'] ?>" placeholder="Suffix"
                                                             class="form-control">
                                                     </div>
-                                                </div>
-                                                <div class="mb-2 row">
+
                                                     <div class="col-4">
                                                         <label for="" class="form-label">Sex</label>
                                                         <select name="sex" id="" class="form-select">
@@ -135,10 +133,17 @@
                                                             <option value="F" <?= $resident['sex'] === 'F' ? 'selected' : '' ?>>Female</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-8 mb-2">
+                                                </div>
+                                                <div class="mb-2 row">
+                                                    <div class="col-6 mb-2">
                                                         <label for="" class="form-label">Purok</label>
                                                         <input type="text" name="purok" value="<?= $resident['purok'] ?>"
                                                             placeholder="Purok" class="form-control">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label for="" class="form-label">Census Year</label>
+                                                        <input type="number" class="form-control" name="census_year" value="<?= $resident['census_year'] ?>">
                                                     </div>
                                                 </div>
                                             </div>

@@ -8,7 +8,7 @@
         <div class="row align-items-center mt-4">
 
             <div class="col-12 col-md-4 mb-2 mb-md-0">
-                <h4 class="text-dark">List of Residents Users</h4>
+                <h4 class="text-success">List of Residents Users</h4>
             </div>
 
             <div class="col-12 col-md-4 mb-2 mb-md-0">
@@ -25,7 +25,7 @@
                 </button>
             </div>
         </div>
-        <hr>
+        <div class="mt-3 mb-2 border-bottom border-2 border-orange"></div>
     </div>
     <div class="table-responsive">
         <table class="table table-bordered">

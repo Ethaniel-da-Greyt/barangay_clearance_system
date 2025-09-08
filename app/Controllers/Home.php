@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\FireCaseModel;
 use App\Models\PopulationModel;
 use App\Models\RegisterUserModel;
+use App\Models\RequestsModel;
 
 class Home extends BaseController
 {
@@ -24,7 +25,55 @@ class Home extends BaseController
     }
     public function requests()
     {
-        return view('admin/requests');
+        $model = new RequestsModel();
+
+
+        $query = $model->where('is_deleted', 0);
+
+
+        $search = $this->request->getGet('search');
+        if ($search) {
+            $query->groupStart()
+                ->like('firstname', $search)
+                ->orLike('lastname', $search)
+                ->orLike('purok', $search)
+                ->orLike('resident_id', $search)
+                ->groupEnd();
+        }
+
+
+        $selectedYear = $this->request->getGet('year');
+        if ($selectedYear) {
+            $query->where('census_year', $selectedYear);
+        }
+
+
+        $paginated = $query->orderBy('id', 'desc')->paginate(10);
+        $pager = $model->pager;
+
+
+        $groupedResidents = [];
+        foreach ($paginated as $resident) {
+            $year = $resident['census_year'];
+            $groupedResidents[$year][] = $resident;
+        }
+
+
+        $availableYears = $model->select('census_year')
+            ->distinct()
+            ->orderBy('census_year', 'desc')
+            ->findAll();
+
+        $years = array_column($availableYears, 'census_year');
+
+        return view('admin/requests', [
+            'groupedResidents' => $groupedResidents,
+            'pager' => $pager,
+            'search' => $search,
+            'selectedYear' => $selectedYear,
+            'years' => $years,
+            'totalPopulation' => $model->where('is_deleted', 0)->countAllResults(),
+        ]);
     }
 
     public function residence(): string
@@ -96,7 +145,8 @@ class Home extends BaseController
             'pager' => $pager,
             'search' => $search,
             'selectedYear' => $selectedYear,
-            'years' => $years
+            'years' => $years,
+            'totalPopulation' => $model->where('is_deleted', 0)->countAllResults(),
         ]);
     }
 

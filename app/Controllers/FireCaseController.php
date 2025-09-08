@@ -51,7 +51,7 @@ class FireCaseController extends BaseController
 
     public function update()
     {
-        $user = new FireCaseModel();
+        $record = new FireCaseModel();
         $id = $this->request->getPost('id');
         $validation = Services::validation();
 
@@ -71,9 +71,9 @@ class FireCaseController extends BaseController
         }
 
 
-        $userFind = $user->where('id', $id)->first();
-        if (!$userFind) {
-            return redirect()->back()->with('error', 'User not found.');
+        $findRecord = $record->where('id', $id)->first();
+        if (!$findRecord) {
+            return redirect()->back()->with('error', 'Record not found.');
         }
 
         $data = [
@@ -87,25 +87,26 @@ class FireCaseController extends BaseController
             'affected_individuals' => $this->request->getPost('affected_individuals'),
         ];
 
-        $user->update($id, $data);
+        $record->update($id, $data);
+        $case_id = $record->where('id', $id)->first();
 
-        return redirect()->back()->with('success', $data['firstname'] . ' updated successfully!');
+        return redirect()->back()->with('success', $case_id['case_id'] . ' Record updated successfully!');
     }
 
 
     public function delete()
     {
-        $user = new FireCaseModel();
+        $record = new FireCaseModel();
         $id = $this->request->getPost('id');
-        $find = $user->where('is_deleted', 0)->where('id', $id)->first();
+        $find = $record->where('is_deleted', 0)->where('id', $id)->first();
 
         if ($find) {
             $data['is_deleted'] = 1;
-            $user->update($id, $data);
-            return redirect()->back()->with('success', $find['firstname'] . ' Deleted Successfully');
+            $record->update($id, $data);
+            return redirect()->back()->with('success', $find['case_id'] . ' Deleted Successfully');
         }
 
-        return redirect()->back()->with('error', $find['firstname'] . ' already deleted');
+        return redirect()->back()->with('error', $find['case_id'] . ' already deleted');
     }
 
     public function UserId()

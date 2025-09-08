@@ -5,9 +5,9 @@
 <?php $this->section('body') ?>
 <div class="m-5">
     <div class="">
-        <div class="row align-items-center mt-4">
+        <div class="row align-items-center mt-4 border-bottom border-2 border-orange mb-2">
             <div class="col-12 col-md-4 mb-2 mb-md-0">
-                <h4 class="text-dark">Fire Case Incidence Lists</h4>
+                <h4 class="text-orange">Fire Case Incidence Lists</h4>
             </div>
 
             <div class="col-12 col-md-4 mb-2 mb-md-0 d-flex">
@@ -37,7 +37,6 @@
                 </button>
             </div>
         </div>
-        <hr>
     </div>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
@@ -102,6 +101,7 @@
                                         </div>
                                         <form action="/admin/fire-list/update" method="post">
                                             <?= csrf_field() ?>
+                                            <input type="hidden" name="id" value="<?= $case['id'] ?>">
                                             <div class="modal-body">
                                                 <div class="row mb-2">
                                                     <div class="col-6">
@@ -167,7 +167,7 @@
                                             <p class="fs-3 text-danger text-center">Are you sure you want to delete this report?</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <form action="" method="post">
+                                            <form action="/admin/fire-list/delete" method="post">
                                                 <input type="hidden" name="id" value="<?= esc($case['id']) ?>">
                                                 <button class="btn btn-danger">Confirm</button>
                                             </form>

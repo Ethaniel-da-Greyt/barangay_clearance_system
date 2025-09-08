@@ -3,34 +3,36 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\PopulationModel;
+use App\Models\RequestsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use Config\Services;
 
-class PopulationController extends BaseController
+class RequestsController extends BaseController
 {
     public function store()
     {
         $validation = Services::validation();
 
         $rules = [
-            'firstname' => 'required',
-            'middle_initial' => 'permit_empty',
-            'lastname' => 'required',
-            'suffix' => 'permit_empty',
-            'sex' => 'required',
-            'purok' => 'required',
-            'census_year' => 'required',
+            'request_type'      => 'required',
+            'firstname'         => 'required',
+            'middle_initial'    => 'permit_empty',
+            'lastname'          => 'required',
+            'suffix'            => 'permit_empty',
+            'sex'               => 'required',
+            'purok'             => 'required',
+            'contact_no'        => 'required',
+            'photo'             => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]|max_size[photo,2048]',
         ];
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $userId = $this->UserId();
+        $request_id = $this->request_id();
 
         $data = [
-            'resident_id' => $userId,
+            'request_id' => $request_id,
             'firstname' => $this->request->getPost('firstname'),
             'middle_initial' => $this->request->getPost('middle_initial'),
             'lastname' => $this->request->getPost('lastname'),
@@ -40,7 +42,7 @@ class PopulationController extends BaseController
             'census_year' => $this->request->getPost('census_year'),
         ];
 
-        $user = new PopulationModel();
+        $user = new RequestsModel();
         $user->save($data);
 
         return redirect()->to('/admin/population')
@@ -49,7 +51,7 @@ class PopulationController extends BaseController
 
     public function update()
     {
-        $user = new PopulationModel();
+        $user = new RequestsModel();
         $id = $this->request->getPost('id');
         $validation = Services::validation();
 
@@ -91,7 +93,7 @@ class PopulationController extends BaseController
 
     public function delete()
     {
-        $user = new PopulationModel();
+        $user = new RequestsModel();
         $id = $this->request->getPost('id');
         $find = $user->where('is_deleted', 0)->where('id', $id)->first();
 
@@ -104,10 +106,10 @@ class PopulationController extends BaseController
         return redirect()->back()->with('error', $find['firstname'] . ' already deleted');
     }
 
-    public function UserId()
+    public function request_id()
     {
         $prefix = date('Ym');
-        $users = new PopulationModel();
+        $users = new RequestsModel();
         $lastUser = $users->like('resident_id', $prefix . '-', 'after')
             ->orderBy('resident_id', 'DESC')
             ->first();
