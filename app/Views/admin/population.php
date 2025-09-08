@@ -41,7 +41,7 @@
         <hr>
     </div>
     <div class="table-responsive">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered">
             <thead class="table-dark">
                 <tr>
                     <th>Resident ID</th>
@@ -57,7 +57,6 @@
             <tbody>
                 <?php if (!empty($groupedResidents)): ?>
                     <?php foreach ($groupedResidents as $year => $residents): ?>
-
                         <?php foreach ($residents as $resident): ?>
                             <tr>
                                 <td><?= esc($resident['resident_id']) ?></td>
@@ -176,12 +175,10 @@
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                        <tr>
-                            <td colspan="8">
-                                <span class="text-primary fw-bold">Census in year <?= esc($year) ?></span>
-                            </td>
-                        </tr>
                     <?php endforeach; ?>
+                    <td colspan="8" class="bg-light fw-bold text-primary fs-5">
+                        Population (<?= esc($year) ?> Census)
+                    </td>
                 <?php else: ?>
                     <tr>
                         <td colspan="8" class="text-center">No Resident Found</td>

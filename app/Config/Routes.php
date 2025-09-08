@@ -23,3 +23,6 @@ $routes->post('/admin/population/delete', 'PopulationController::delete');
 
 
 $routes->get('/admin/fire-list', 'Home::fire_list');
+$routes->post('/admin/fire-list', 'FireCaseController::store');
+$routes->post('/admin/fire-list/update', 'FireCaseController::update');
+$routes->post('/admin/fire-list/delete', 'FireCaseController::delete');

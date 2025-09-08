@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\FireCaseModel;
 use App\Models\PopulationModel;
 use App\Models\RegisterUserModel;
 
@@ -101,6 +102,45 @@ class Home extends BaseController
 
     public function fire_list()
     {
-        return view('admin/fire_list');
+        $model = new FireCaseModel();
+
+        $query = $model->where('is_deleted', 0);
+
+        $search = $this->request->getGet('search');
+        if ($search) {
+            $query->groupStart()
+                ->like('cause_of_fire', $search)
+                ->orLike('exact_location', $search)
+                ->orLike('case_id', $search)
+                ->groupEnd();
+        }
+
+        $selectedYear = $this->request->getGet('year');
+        if ($selectedYear) {
+            $query->where("YEAR(created_at)", $selectedYear);
+        }
+
+        $paginated = $query->orderBy('id', 'desc')->paginate(10);
+        $pager = $model->pager;
+
+        $groupedResidents = [];
+        foreach ($paginated as $resident) {
+            $year = date('Y', strtotime($resident['created_at']));
+            $groupedResidents[$year][] = $resident;
+        }
+
+        $availableYears = $model->select("DISTINCT YEAR(created_at) as year")
+            ->orderBy('year', 'desc')
+            ->findAll();
+
+        $years = array_column($availableYears, 'year');
+
+        return view('admin/fire_list', [
+            'groupedResidents' => $groupedResidents,
+            'pager' => $pager,
+            'search' => $search,
+            'selectedYear' => $selectedYear,
+            'years' => $years
+        ]);
     }
 }

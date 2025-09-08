@@ -87,8 +87,6 @@ class PopulationController extends BaseController
     }
 
 
-
-
     public function delete()
     {
         $user = new PopulationModel();
@@ -120,23 +118,5 @@ class PopulationController extends BaseController
         }
 
         return $prefix . '-' . $newNumber;
-    }
-
-    public function defaultPassword()
-    {
-        try {
-            $id = $this->request->getPost('id');
-
-            $user = new PopulationModel();
-
-
-            $data['password'] = DEFAULT_PASSWORD;
-
-            $user->update($id, $data);
-
-            return redirect()->back()->with('success', 'Default Password Successfully');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
     }
 }
