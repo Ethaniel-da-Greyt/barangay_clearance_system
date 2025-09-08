@@ -21,13 +21,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
+                    <li class="nav-item me-4 ms-5">
                         <a class="nav-link <?= $this->renderSection('dashboard') ?> text-white" aria-current="page" href="/">Dashboard</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item me-4">
+                        <a class="nav-link <?= $this->renderSection('requests') ?> text-white" href="/admin/requests">Requests</a>
+                    </li>
+                    <li class="nav-item me-4">
                         <a class="nav-link <?= $this->renderSection('residents') ?> text-white" href="/admin/residents">Registered Residents</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item me-4">
                         <a class="nav-link <?= $this->renderSection('population') ?> text-white" href="/admin/population">Population</a>
                     </li>
                     <li class="nav-item">

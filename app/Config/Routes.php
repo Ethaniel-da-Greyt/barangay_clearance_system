@@ -8,6 +8,8 @@ use App\Controllers\UserRegisterController;
  */
 $routes->get('/', 'Home::index');
 
+$routes->get('/admin/requests', 'Home::requests');
+
 $routes->get('/admin/residents', 'Home::residence');
 $routes->post('/admin/residents', 'UserRegisterController::store');
 $routes->post('/admin/residents/update', 'UserRegisterController::update');

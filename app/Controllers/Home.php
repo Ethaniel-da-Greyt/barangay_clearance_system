@@ -9,7 +9,21 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('admin/dashboard');
+        $residentModel = new RegisterUserModel();
+        $populationModel = new PopulationModel();
+        // $requestModel = new \App\Models\RequestModel();
+
+        $data = [
+            'totalResidents' => $residentModel->where('is_deleted', 0)->countAllResults(),
+            'totalPopulation' => $populationModel->where('is_deleted', 0)->countAllResults(),
+            // 'totalActiveRequests' => $requestModel->where('status', 'pending')->countAllResults(), // or 'active'
+        ];
+
+        return view('admin/dashboard', $data);
+    }
+    public function requests()
+    {
+        return view('admin/requests');
     }
 
     public function residence(): string
