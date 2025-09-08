@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class UserRegister extends Migration
+class Population extends Migration
 {
     public function up()
     {
@@ -14,10 +14,14 @@ class UserRegister extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true
             ],
-            'user_id' => [
+            'resident_id' => [
                 'type'     => 'TEXT',
             ],
             'firstname'        => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+            ],
+            'lastname'         => [
                 'type'       => 'VARCHAR',
                 'constraint' => 100,
             ],
@@ -26,9 +30,10 @@ class UserRegister extends Migration
                 'constraint' => 50,
                 'null'       => true,
             ],
-            'lastname'         => [
+            'suffix'   => [
                 'type'       => 'VARCHAR',
-                'constraint' => 100,
+                'constraint' => 50,
+                'null'       => true,
             ],
             'sex'         => [
                 'type'       => 'ENUM',
@@ -38,24 +43,9 @@ class UserRegister extends Migration
                 'type'       => 'TEXT',
                 'null' => true,
             ],
-            'username'         => [
-                'type'       => 'VARCHAR',
-                'constraint' => 50,
-                'unique'     => true,
-            ],
-            'password'         => [
-                'type'       => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'role'             => [
-                'type'       => 'ENUM',
-                'constraint' => ['admin', 'resident'],
-                'default'    => 'resident',
-            ],
-            'photo'            => [
-                'type'       => 'TEXT',
-                'constraint' => 255,
-                'null'       => true,
+            'census_year'    => [
+                'type'       => 'YEAR',
+                'null'       => false,
             ],
             'is_deleted'       => [
                 'type'       => 'TINYINT',
@@ -74,8 +64,7 @@ class UserRegister extends Migration
 
         $this->forge->addKey('id', true); // Primary key
 
-        // Foreign key: user_id referencing users.id (self-reference)
-        $this->forge->createTable('users');
+        $this->forge->createTable('census');
     }
 
     public function down()

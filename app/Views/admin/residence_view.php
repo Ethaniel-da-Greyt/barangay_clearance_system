@@ -18,9 +18,9 @@
             </div>
 
             <div class="col-12 col-md-4 text-md-end">
-                <button class="btn btn-primary text-white w-md-auto" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#addModal">
+                <button class="btn btn-primary text-white w-md-auto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addModal">
                     <i class="bi bi-people"></i> Add Resident
                 </button>
             </div>
@@ -133,7 +133,7 @@
                                         <span class="btn btn-close" data-bs-dismiss="modal"></span>
                                     </div>
 
-                                    <form action="/admin/residence/update" method="POST" enctype="multipart/form-data">
+                                    <form action="/admin/residents/update" method="POST" enctype="multipart/form-data">
                                         <?= csrf_field() ?>
                                         <div class="modal-body">
                                             <input type="hidden" name="id" value="<?= esc($resident['id']) ?>">
@@ -217,10 +217,10 @@
                                     </div>
 
                                     <div class="modal-body">
-                                        <p class="text-danger text-center fs-3">Are you sure you want to remove <?= esc(ucfirst($resident['firstname'])." ".ucfirst($resident['lastname'])) ?></p>
+                                        <p class="text-danger text-center fs-3">Are you sure you want to remove <?= esc(ucfirst($resident['firstname']) . " " . ucfirst($resident['lastname'])) ?></p>
                                     </div>
                                     <div class="modal-footer">
-                                        <form action="/admin/residence/delete" method="post">
+                                        <form action="/admin/residents/delete" method="post">
                                             <input type="hidden" name="id" value="<?= esc($resident['id']) ?>">
                                             <button class="btn btn-danger">Confirm</button>
                                         </form>
@@ -237,7 +237,7 @@
                 <?php endif ?>
             </tbody>
         </table>
-    </div>  
+    </div>
     <div class="d-flex justify-content-center mt-3">
         <?= $pager->links('default', 'bootstrap') ?>
     </div>
@@ -252,7 +252,7 @@
                 <span class="btn btn-close" data-bs-dismiss="modal"></span>
             </div>
 
-            <form action="/admin/residence" method="POST" enctype="multipart/form-data">
+            <form action="/admin/residents" method="POST" enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <div class="modal-body">
                     <div class="row">

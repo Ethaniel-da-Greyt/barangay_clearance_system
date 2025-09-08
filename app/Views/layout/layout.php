@@ -25,7 +25,7 @@
                         <a class="nav-link <?= $this->renderSection('dashboard') ?> text-white" aria-current="page" href="/">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $this->renderSection('residents') ?> text-white" href="/admin/residence">Registered Residents</a>
+                        <a class="nav-link <?= $this->renderSection('residents') ?> text-white" href="/admin/residents">Registered Residents</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $this->renderSection('population') ?> text-white" href="/admin/population">Population</a>
@@ -47,7 +47,7 @@
 
     <?php if (session()->getFlashdata('success')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -60,7 +60,7 @@
 
     <?php if (session()->getFlashdata('error')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
