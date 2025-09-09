@@ -23,6 +23,7 @@ class RequestsModel extends Model
         'purok',
         'contact_no',
         'photo',
+        'status',
         'is_deleted',
 
     ];

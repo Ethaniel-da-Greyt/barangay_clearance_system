@@ -29,40 +29,67 @@ class RequestsController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $request_id = $this->request_id();
+        $user_id = $this->request->getPost('user_id');
+        $request_id = "REQ-".uniqid();
+
+        $path = FCPATH . 'uploads/avatar/' . $user_id . '/requirements/'.$request_id.'/';
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $img = $this->request->getFile('photo');
+
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            $imgName = $img->getRandomName();
+            $img->move($path, $imgName);
+            $path_file = $path.$imgName;
+        } else {
+            $defaultPhoto = FCPATH . 'uploads/No_image.png';
+            $imgName = 'No_image.png';
+            $path_file = $path.$imgName;
+
+            if (file_exists($defaultPhoto)) {
+                copy($defaultPhoto, $path . $imgName);
+            }
+        }
+
 
         $data = [
             'request_id' => $request_id,
+            'request_type' => $this->request->getPost('request_type'),
             'firstname' => $this->request->getPost('firstname'),
             'middle_initial' => $this->request->getPost('middle_initial'),
             'lastname' => $this->request->getPost('lastname'),
             'suffix' => $this->request->getPost('suffix'),
             'sex' => $this->request->getPost('sex'),
             'purok' => $this->request->getPost('purok'),
-            'census_year' => $this->request->getPost('census_year'),
+            'contact_no' => $this->request->getPost('contact_no'),
+            'photo' => $path_file,
         ];
 
         $user = new RequestsModel();
         $user->save($data);
 
-        return redirect()->to('/admin/population')
+        return redirect()->to('/admin/requests')
             ->with('success', $this->request->getPost('firstname') . ' Added Successfully');
     }
 
     public function update()
     {
-        $user = new RequestsModel();
+        $model = new RequestsModel();
         $id = $this->request->getPost('id');
         $validation = Services::validation();
 
         $rules = [
+            'request_type' => 'required',
             'firstname' => 'required',
             'middle_initial' => 'permit_empty',
             'lastname' => 'required',
             'suffix' => 'permit_empty',
             'sex' => 'permit_empty',
             'purok' => 'required',
-            'census_year' => 'required',
+            'contact_no' => 'required',
+            'photo' => 'permit_empty',
         ];
 
         if (!$this->validate($rules)) {
@@ -70,24 +97,26 @@ class RequestsController extends BaseController
         }
 
 
-        $userFind = $user->where('id', $id)->first();
-        if (!$userFind) {
+        $findRequest = $model->where('id', $id)->first();
+        if (!$findRequest) {
             return redirect()->back()->with('error', 'User not found.');
         }
 
         $data = [
+            'request_type' => $this->request->getPost('firstname'),
             'firstname' => $this->request->getPost('firstname'),
             'middle_initial' => $this->request->getPost('middle_initial'),
             'lastname' => $this->request->getPost('lastname'),
             'suffix' => $this->request->getPost('suffix'),
             'sex' => $this->request->getPost('sex'),
             'purok' => $this->request->getPost('purok'),
-            'census_year' => $this->request->getPost('census_year'),
+            'contact_no' => $this->request->getPost('contact_no'),
+            'photo' => $this->request->getPost('photo'),
         ];
 
-        $user->update($id, $data);
+        $model->update($id, $data);
 
-        return redirect()->back()->with('success', $data['firstname'] . ' updated successfully!');
+        return redirect()->back()->with('success', $data['request_type'] . ' updated successfully!');
     }
 
 
@@ -106,21 +135,21 @@ class RequestsController extends BaseController
         return redirect()->back()->with('error', $find['firstname'] . ' already deleted');
     }
 
-    public function request_id()
-    {
-        $prefix = date('Ym');
-        $users = new RequestsModel();
-        $lastUser = $users->like('resident_id', $prefix . '-', 'after')
-            ->orderBy('resident_id', 'DESC')
-            ->first();
+    // public function request_id()
+    // {
+    //     $prefix = date('Ym');
+    //     $users = new RequestsModel();
+    //     $lastUser = $users->like('resident_id', $prefix . '-', 'after')
+    //         ->orderBy('resident_id', 'DESC')
+    //         ->first();
 
-        if ($lastUser) {
-            $lastNumber = (int) substr($lastUser['resident_id'], -4);
-            $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $newNumber = "0001";
-        }
+    //     if ($lastUser) {
+    //         $lastNumber = (int) substr($lastUser['resident_id'], -4);
+    //         $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+    //     } else {
+    //         $newNumber = "0001";
+    //     }
 
-        return $prefix . '-' . $newNumber;
-    }
+    //     return $prefix . '-' . $newNumber;
+    // }
 }

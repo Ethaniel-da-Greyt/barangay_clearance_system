@@ -28,7 +28,7 @@ class Home extends BaseController
         $model = new RequestsModel();
 
 
-        $query = $model->where('is_deleted', 0)->where('status', 'pending');
+        $query = $model->where('is_deleted', 0)->where('status', 'pending')->where('is_canceled', 0);
 
 
         $search = $this->request->getGet('search');
@@ -53,14 +53,16 @@ class Home extends BaseController
 
         $paginated = $query->orderBy('id', 'desc')->paginate(10);
         $pager = $model->pager;
+        $requests = $query;
 
 
 
         return view('admin/requests', [
             'pager' => $pager,
             'search' => $search,
+            'requests' => $requests,
             'selected_status' => $selected_status,
-            'total_request' => $model->where('is_deleted', 0)->where('status', pending)->countAllResults(),
+            'total_request' => $model->where('is_deleted', 0)->where('status', 'pending')->countAllResults(),
         ]);
     }
 
