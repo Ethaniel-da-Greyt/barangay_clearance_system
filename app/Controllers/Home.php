@@ -28,23 +28,26 @@ class Home extends BaseController
         $model = new RequestsModel();
 
 
-        $query = $model->where('is_deleted', 0);
+        $query = $model->where('is_deleted', 0)->where('status', 'pending');
 
 
         $search = $this->request->getGet('search');
         if ($search) {
             $query->groupStart()
                 ->like('firstname', $search)
+                ->orLike('request_id', $search)
+                ->orLike('request_type', $search)
                 ->orLike('lastname', $search)
+                ->orLike('middle_initial', $search)
+                ->orLike('contact_no', $search)
                 ->orLike('purok', $search)
-                ->orLike('resident_id', $search)
                 ->groupEnd();
         }
 
 
-        $selectedYear = $this->request->getGet('year');
-        if ($selectedYear) {
-            $query->where('census_year', $selectedYear);
+        $selected_status = $this->request->getGet('status');
+        if ($selected_status) {
+            $query->where('status', $selected_status);
         }
 
 
@@ -52,27 +55,12 @@ class Home extends BaseController
         $pager = $model->pager;
 
 
-        $groupedResidents = [];
-        foreach ($paginated as $resident) {
-            $year = $resident['census_year'];
-            $groupedResidents[$year][] = $resident;
-        }
-
-
-        $availableYears = $model->select('census_year')
-            ->distinct()
-            ->orderBy('census_year', 'desc')
-            ->findAll();
-
-        $years = array_column($availableYears, 'census_year');
 
         return view('admin/requests', [
-            'groupedResidents' => $groupedResidents,
             'pager' => $pager,
             'search' => $search,
-            'selectedYear' => $selectedYear,
-            'years' => $years,
-            'totalPopulation' => $model->where('is_deleted', 0)->countAllResults(),
+            'selected_status' => $selected_status,
+            'total_request' => $model->where('is_deleted', 0)->where('status', pending)->countAllResults(),
         ]);
     }
 

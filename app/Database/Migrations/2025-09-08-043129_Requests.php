@@ -60,11 +60,11 @@ class Requests extends Migration
             ],
             'created_at' => [
                 'type' => 'DATETIME',
-                'null' => true,
+                'null' => false,
             ],
             'updated_at' => [
                 'type' => 'DATETIME',
-                'null' => true,
+                'null' => false,
             ],
             'is_deleted' => [
                 'type' => 'TINYINT',

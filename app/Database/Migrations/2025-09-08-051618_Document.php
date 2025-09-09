@@ -28,13 +28,18 @@ class Document extends Migration
                 'type'       => 'TEXT',
                 'null'       => true,
             ],
+            'fee' => [
+                'type'       => 'DECIMAL',
+                'constraint' => '10,2',
+                'null'       => true,
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
-                'null' => true,
+                'null' => false,
             ],
             'updated_at' => [
                 'type' => 'DATETIME',
-                'null' => true,
+                'null' => false,
             ],
             'is_deleted' => [
                 'type' => 'TINYINT',
