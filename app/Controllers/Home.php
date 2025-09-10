@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\DocumentModel;
 use App\Models\FireCaseModel;
 use App\Models\PopulationModel;
 use App\Models\RegisterUserModel;
@@ -26,43 +27,49 @@ class Home extends BaseController
     public function requests()
     {
         $model = new RequestsModel();
+        $documentmodel = new DocumentModel();
 
-
-        $query = $model->where('is_deleted', 0)->where('status', 'pending')->where('is_canceled', 0);
-
-
+        $status = $this->request->getGet('status');
+        $document = $this->request->getGet('document');
         $search = $this->request->getGet('search');
-        if ($search) {
+
+        $query = $model->where('is_deleted', 0)
+            ->where('is_canceled', 0);
+
+        if (empty($search) && empty($status)) {
+            $query->where('status', 'pending');
+            $status = 'pending';
+        }
+
+        if (!empty($status) && empty($search)) {
+            $query->where('status', $status);
+        }
+
+        if (!empty($document)) {
+            $query->where('request_type', $document);
+        }
+
+
+        if (!empty($search)) {
             $query->groupStart()
                 ->like('firstname', $search)
-                ->orLike('request_id', $search)
-                ->orLike('request_type', $search)
                 ->orLike('lastname', $search)
                 ->orLike('middle_initial', $search)
+                ->orLike('request_id', $search)
                 ->orLike('contact_no', $search)
                 ->orLike('purok', $search)
                 ->groupEnd();
         }
 
-
-        $selected_status = $this->request->getGet('status');
-        if ($selected_status) {
-            $query->where('status', $selected_status);
-        }
-
-
-        $paginated = $query->orderBy('id', 'desc')->paginate(10);
+        // ✅ Final results with pagination
+        $requests = $query->orderBy('id', 'desc')->paginate(10);
         $pager = $model->pager;
-        $requests = $query;
-
-
 
         return view('admin/requests', [
             'pager' => $pager,
             'search' => $search,
+            'document' => $documentmodel,
             'requests' => $requests,
-            'selected_status' => $selected_status,
-            'total_request' => $model->where('is_deleted', 0)->where('status', 'pending')->countAllResults(),
         ]);
     }
 

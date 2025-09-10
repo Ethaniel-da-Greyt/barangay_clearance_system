@@ -4,32 +4,30 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RequestsModel extends Model
+class DocumentModel extends Model
 {
-    protected $table = 'requests';
+    protected $table = 'document';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
     protected $allowedFields = [
-        'request_id',
-        'request_type',
-        'firstname',
-        'middle_initial',
-        'lastname',
-        'suffix',
-        'sex',
-        'purok',
-        'contact_no',
-        'photo',
-        'status',
-        'is_deleted',
-
+        'document_id',
+        'document_name',
+        'requirements',
+        'fee'
     ];
 
-    
-
+    public function document($requestId)
+    {
+        $request = $this->find($requestId);
+        if ($request) {
+            $docModel = new RequestsModel();
+            return $docModel->find($request['document_id']);
+        }
+        return null;
+    }
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
