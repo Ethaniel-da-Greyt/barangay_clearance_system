@@ -14,12 +14,12 @@ class Home extends BaseController
     {
         $residentModel = new RegisterUserModel();
         $populationModel = new PopulationModel();
-        // $requestModel = new \App\Models\RequestModel();
+        $requestModel = new RequestsModel();
 
         $data = [
             'totalResidents' => $residentModel->where('is_deleted', 0)->countAllResults(),
             'totalPopulation' => $populationModel->where('is_deleted', 0)->countAllResults(),
-            // 'totalActiveRequests' => $requestModel->where('status', 'pending')->countAllResults(), // or 'active'
+            'totalActiveRequests' => $requestModel->where('status', 'pending')->countAllResults(), // or 'active'
         ];
 
         return view('admin/dashboard', $data);
@@ -29,21 +29,24 @@ class Home extends BaseController
         $model = new RequestsModel();
         $documentmodel = new DocumentModel();
 
-        $status = $this->request->getGet('status');
+        $status = $this->request->getGet('filter');
         $document = $this->request->getGet('document');
         $search = $this->request->getGet('search');
+
 
         $query = $model->where('is_deleted', 0)
             ->where('is_canceled', 0);
 
-        if (empty($search) && empty($status)) {
-            $query->where('status', 'pending');
-            $status = 'pending';
-        }
 
-        if (!empty($status) && empty($search)) {
+        if (empty($search) && empty($document)) {
+
+            if (empty($status)) {
+                $status = 'pending';
+            }
+
             $query->where('status', $status);
         }
+
 
         if (!empty($document)) {
             $query->where('request_type', $document);
@@ -61,7 +64,7 @@ class Home extends BaseController
                 ->groupEnd();
         }
 
-        // ✅ Final results with pagination
+
         $requests = $query->orderBy('id', 'desc')->paginate(10);
         $pager = $model->pager;
 
@@ -70,8 +73,10 @@ class Home extends BaseController
             'search' => $search,
             'document' => $documentmodel,
             'requests' => $requests,
+            'status' => $status
         ]);
     }
+
 
     public function residence(): string
     {
@@ -189,5 +194,10 @@ class Home extends BaseController
             'selectedYear' => $selectedYear,
             'years' => $years
         ]);
+    }
+
+    public function user()
+    {
+        return view('user/user');
     }
 }

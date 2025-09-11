@@ -178,14 +178,14 @@
                             </div>
                         <?php endforeach; ?>
                         <tr>
-                            <td colspan="10">
+                            <td colspan="11">
                                 <span class="text-primary fw-bold">Fire Case Incidents (<?= esc($year) ?>)</span>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="8" class="text-center">No Record Found</td>
+                        <td colspan="11" class="text-center">No Record Found</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

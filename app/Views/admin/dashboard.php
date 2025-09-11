@@ -25,7 +25,7 @@
             <h4 class="text-success">Total Active Requests</h4>
             <div class="d-flex justify-content-center align-items-center">
                 <i class="bi bi-people me-3 text-success fs-2"></i>
-                <h3 class="text-success">10</h3>
+                <h3 class="text-success"><?= esc($totalActiveRequests) ?></h3>
             </div>
         </div>
     </div>

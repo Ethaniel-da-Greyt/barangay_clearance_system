@@ -21,7 +21,7 @@ class UserRegisterController extends BaseController
             'lastname' => 'required',
             'sex' => 'permit_empty',
             'purok' => 'required',
-            'username' => "permit_empty|is_unique[users.username,id,{$id}]", 
+            'username' => "permit_empty|is_unique[users.username,id,{$id}]",
             'role' => 'required',
             'photo' => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]|max_size[photo,2048]',
         ];
@@ -30,7 +30,7 @@ class UserRegisterController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        
+
         $userFind = $user->where('id', $id)->first();
         if (!$userFind) {
             return redirect()->back()->with('error', 'User not found.');
@@ -124,7 +124,7 @@ class UserRegisterController extends BaseController
         $user = new RegisterUserModel();
         $user->save($data);
 
-        return redirect()->to('/admin/residence')
+        return redirect()->to('/admin/residents')
             ->with('success', $this->request->getPost('firstname') . ' Added Successfully');
     }
 
@@ -162,19 +162,19 @@ class UserRegisterController extends BaseController
         return $prefix . '-' . $newNumber;
     }
 
-    public function defaultPassword(){
+    public function defaultPassword()
+    {
         try {
             $id = $this->request->getPost('id');
 
             $user = new RegisterUserModel();
 
-            
+
             $data['password'] = DEFAULT_PASSWORD;
-            
+
             $user->update($id, $data);
-            
+
             return redirect()->back()->with('success', 'Default Password Successfully');
-        
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

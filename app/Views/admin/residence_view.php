@@ -252,7 +252,7 @@
                 <span class="btn btn-close" data-bs-dismiss="modal"></span>
             </div>
 
-            <form action="/admin/residents" method="POST" enctype="multipart/form-data">
+            <form action="/admin/residents/add" method="POST" enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <div class="modal-body">
                     <div class="row">

@@ -66,16 +66,12 @@
                                 echo esc($doc['document_name']);
                                 ?>
                             </td>
-                            <td><?= esc($request['firstname']." ".$request['middle_initial']." ".$request['lastname']." ".$request['suffix']) ?></td>
+                            <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?></td>
                             <td><?= esc($request['sex']) ?></td>
                             <td><?= esc($request['purok']) ?></td>
                             <td><?= esc($request['contact_no']) ?></td>
                             <td>
-                                <a data-bs-toggle="modal" data-bs-target="#photo_<?= esc($request['request_id']) ?>">
-                                    <img class="rounded-circle"
-                                        src="<?= base_url('uploads/avatar/' . esc($request['request_id']) . '/' . esc($request['photo'])) ?>"
-                                        width="50" alt="avatar">
-                                </a>
+                                <button class="btn btn-light btn-sm border border-1" data-bs-target="#img_<?= $request['request_id'] ?>" data-bs-toggle="modal">View</button>
                             </td>
                             <?php
                             $color = null;
@@ -93,25 +89,49 @@
                             }
                             ?>
                             <td><span class="badge text-bg-<?= $color ?> text-white"><?= ucfirst($status) ?></span></td>
-                            <td>
-                                <div class="d-flex">
-                                    <button class="btn btn-success btn-sm"
-                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                                        data-bs-toggle="modal" data-bs-target="#update_<?= esc($request['request_id']) ?>">
-                                        <i class="bi bi-check-circle me-2"></i>
-                                        Approve
-                                    </button>
+                            <td><?php
+                                if ($status !== 'rejected' && $status !== 'approved'): ?>
 
-                                    <button class="ms-2 btn btn-danger btn-sm"
-                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                                        data-bs-toggle="modal" data-bs-target="#delete_<?= esc($request['request_id']) ?>">
-                                        <i class="bi bi-x-circle me-2"></i>
-                                        Reject
-                                    </button>
-                                </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button class="btn btn-success btn-sm"
+                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                            data-bs-toggle="modal" data-bs-target="#update_<?= esc($request['request_id']) ?>">
+                                            <i class="bi bi-check-circle me-2"></i>
+                                            Approve
+                                        </button>
+
+                                        <button class="ms-2 btn btn-danger btn-sm"
+                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                            data-bs-toggle="modal" data-bs-target="#delete_<?= esc($request['request_id']) ?>">
+                                            <i class="bi bi-x-circle me-2"></i>
+                                            Reject
+                                        </button>
+                                    </div>
+
+                                <?php else: ?>
+                                    <div class="text-center">
+                                        <span class="badge text-bg-dark px-4">None</span>
+                                    </div>
+                                <?php endif ?>
                             </td>
                         </tr>
 
+                        <!--View Requirement Modal-->
+                        <div class="modal fade" id="img_<?= $request['request_id'] ?>">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header border-bottom border-orange border-2">
+                                        <h4 class="modal-title text-dark">Photo of Requirement</h4>
+                                        <span class="btn btn-close btn-light" data-bs-dismiss="modal"></span>
+                                    </div>
+                                    <div class="modal-body">
+                                        <picture>
+                                            <img src="<?= $request['photo'] ?>" alt="No Photo">
+                                        </picture>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!--Edit Modal-->
 
                         <!--Deletion Confirmation Modal-->
@@ -141,7 +161,7 @@
                     <?php endforeach ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="10" class="text-center">No User Found</td>
+                        <td colspan="10" class="text-center">No Request Found</td>
                     </tr>
                 <?php endif ?>
             </tbody>

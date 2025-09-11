@@ -11,7 +11,7 @@ $routes->get('/', 'Home::index');
 $routes->get('/admin/requests', 'Home::requests');
 
 $routes->get('/admin/residents', 'Home::residence');
-$routes->post('/admin/residents', 'UserRegisterController::store');
+$routes->post('/admin/residents/add', 'UserRegisterController::store');
 $routes->post('/admin/residents/update', 'UserRegisterController::update');
 $routes->post('/admin/residents/delete', 'UserRegisterController::delete');
 $routes->post('/admin/residents/default', 'UserRegisterController::defaultPassword');
@@ -26,3 +26,6 @@ $routes->get('/admin/fire-list', 'Home::fire_list');
 $routes->post('/admin/fire-list', 'FireCaseController::store');
 $routes->post('/admin/fire-list/update', 'FireCaseController::update');
 $routes->post('/admin/fire-list/delete', 'FireCaseController::delete');
+
+
+$routes->get('/user', 'Home::user');
