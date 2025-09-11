@@ -9,6 +9,8 @@ use App\Controllers\UserRegisterController;
 $routes->get('/', 'Home::index');
 
 $routes->get('/admin/requests', 'Home::requests');
+$routes->post('/admin/requests/approve', 'RequestsController::approve');
+$routes->post('/admin/requests/reject', 'RequestsController::reject');
 
 $routes->get('/admin/residents', 'Home::residence');
 $routes->post('/admin/residents/add', 'UserRegisterController::store');

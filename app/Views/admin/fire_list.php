@@ -3,9 +3,9 @@
 
 <?php $this->section('fire_list') ?>fw-bold active border-bottom border-orange border-2 <?php $this->endSection() ?>
 <?php $this->section('body') ?>
-<div class="m-5">
+<div class="mx-5 mt-1">
     <div class="">
-        <div class="row align-items-center mt-4 border-bottom border-2 border-orange mb-2">
+        <div class="row align-items-center mt-3 border-bottom border-2 border-orange mb-2">
             <div class="col-12 col-md-4 mb-2 mb-md-0">
                 <h4 class="text-orange">Fire Case Incidence Lists</h4>
             </div>
@@ -191,7 +191,7 @@
             </tbody>
         </table>
     </div>
-    <div class="d-flex justify-content-center mt-3">
+    <div class="d-flex justify-content-center mt-2">
         <?= $pager->links('default', 'bootstrap') ?>
     </div>
 </div>

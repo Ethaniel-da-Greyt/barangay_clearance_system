@@ -15,11 +15,14 @@ class Home extends BaseController
         $residentModel = new RegisterUserModel();
         $populationModel = new PopulationModel();
         $requestModel = new RequestsModel();
+        $firecaseModel = new FireCaseModel();
 
+        $currentYear = date("Y");
         $data = [
             'totalResidents' => $residentModel->where('is_deleted', 0)->countAllResults(),
             'totalPopulation' => $populationModel->where('is_deleted', 0)->countAllResults(),
-            'totalActiveRequests' => $requestModel->where('status', 'pending')->countAllResults(), // or 'active'
+            'totalActiveRequests' => $requestModel->where('status', 'pending')->countAllResults(),
+            'firecase' => $requestModel->where('is_deleted', 0)->where('YEAR(date_report)', $currentYear)->countAllResults(),
         ];
 
         return view('admin/dashboard', $data);

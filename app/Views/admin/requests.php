@@ -95,14 +95,14 @@
                                     <div class="d-flex justify-content-center">
                                         <button class="btn btn-success btn-sm"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                                            data-bs-toggle="modal" data-bs-target="#update_<?= esc($request['request_id']) ?>">
+                                            data-bs-toggle="modal" data-bs-target="#approve_<?= esc($request['request_id']) ?>">
                                             <i class="bi bi-check-circle me-2"></i>
                                             Approve
                                         </button>
 
                                         <button class="ms-2 btn btn-danger btn-sm"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                                            data-bs-toggle="modal" data-bs-target="#delete_<?= esc($request['request_id']) ?>">
+                                            data-bs-toggle="modal" data-bs-target="#reject_<?= esc($request['request_id']) ?>">
                                             <i class="bi bi-x-circle me-2"></i>
                                             Reject
                                         </button>
@@ -128,6 +128,48 @@
                                         <picture>
                                             <img src="<?= $request['photo'] ?>" alt="No Photo">
                                         </picture>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Approval Modal-->
+                        <div class="modal fade" id="approve_<?= esc($request['request_id']) ?>">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-success">
+                                        <h4 class="text-white">Confirmation Approval</h4>
+                                        <span class="btn btn-close" data-bs-dismiss="modal"></span>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="fs-3 text-center text-success">Are you sure you want to approve this request?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="/admin/requests/approve" method="POST">
+                                            <input type="hidden" name="id" value="<?= $request['id'] ?>">
+                                            <button class="btn btn-success">Approve</button>
+                                        </form>
+                                        <div class="btn btn-secondary" data-bs-dismiss="modal">Cancel</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Rejection Modal-->
+                        <div class="modal fade" id="reject_<?= esc($request['request_id']) ?>">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger">
+                                        <h4 class="text-white">Confirmation Rejection</h4>
+                                        <span class="btn btn-close" data-bs-dismiss="modal"></span>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="fs-3 text-center text-danger">Are you sure you want to reject this request?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="/admin/requests/reject" method="POST">
+                                            <input type="hidden" name="id" value="<?= $request['id'] ?>">
+                                            <button class="btn btn-danger">Reject</button>
+                                        </form>
+                                        <div class="btn btn-secondary" data-bs-dismiss="modal">Cancel</div>
                                     </div>
                                 </div>
                             </div>
