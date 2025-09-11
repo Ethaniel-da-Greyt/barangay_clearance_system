@@ -35,7 +35,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item me-4 ms-5">
-                        <a class="nav-link <?= $this->renderSection('dashboard') ?> text-white" aria-current="page" href="/">Dashboard</a>
+                        <a class="nav-link <?= $this->renderSection('dashboard') ?> text-white" aria-current="page" href="/admin">Dashboard</a>
                     </li>
                     <li class="nav-item me-4">
                         <a class="nav-link <?= $this->renderSection('requests') ?> text-white" href="/admin/requests">Requests</a>

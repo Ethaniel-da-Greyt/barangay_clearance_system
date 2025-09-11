@@ -55,9 +55,11 @@ class RequestsController extends BaseController
                 }
             }
 
-
+            $requestor_id = $this->request->getPost('requestor_id');
+            
             $data = [
                 'request_id' => $request_id,
+                'requestor_id' => $requestor_id,
                 'request_type' => $this->request->getPost('request_type'),
                 'firstname' => $this->request->getPost('firstname'),
                 'middle_initial' => $this->request->getPost('middle_initial'),

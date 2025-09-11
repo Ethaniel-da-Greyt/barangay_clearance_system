@@ -205,9 +205,4 @@ class Home extends BaseController
             'years' => $years
         ]);
     }
-
-    public function user()
-    {
-        return view('user/user');
-    }
 }
