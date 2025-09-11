@@ -3,10 +3,10 @@
 
 <?php $this->section('requests') ?>fw-bold active border-bottom border-orange border-2 <?php $this->endSection() ?>
 <?php $this->section('body') ?>
-<div class="m-5 mt-5">
+<div class="m-5 mt-3">
     <div class="row align-items-center mt-4">
         <div class="col-3 col-md-3">
-            <h4 class="text-warning">Active Requests</h4>
+            <h4 class="text-warning">Requests Lists</h4>
         </div>
 
         <div class="col-3 col-md-3">
@@ -40,16 +40,16 @@
     </div>
     <div class="border-bottom border-2 border-orange mt-3 mb-2"></div>
 
-    <div class="table-responsive">
+    <div class="table-responsive" style="height: 65vh;">
         <table class="table table-striped">
-            <thead class="table-dark">
+            <thead class="sticky-top table-dark">
                 <tr>
                     <th>Request ID</th>
-                    <th>Document Type</th>
-                    <th>Requestor Name</th>
+                    <th>Document</th>
+                    <th>Requestor</th>
                     <th>Sex</th>
                     <th>Purok</th>
-                    <th>Contact No.</th>
+                    <th>Contact</th>
                     <th>Photo</th>
                     <th>Status</th>
                     <th class="text-center">Action</th>
@@ -176,7 +176,7 @@
                         </div>
                         <!--Edit Modal-->
 
-                        <!--Deletion Confirmation Modal-->
+                        <!--Deletion Confirmation Modal
                         <div class="modal fade" id="delete_<?= esc($request['request_id']) ?>">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -199,7 +199,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     <?php endforeach ?>
                 <?php else: ?>
                     <tr>

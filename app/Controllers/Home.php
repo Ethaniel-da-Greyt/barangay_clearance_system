@@ -16,13 +16,20 @@ class Home extends BaseController
         $populationModel = new PopulationModel();
         $requestModel = new RequestsModel();
         $firecaseModel = new FireCaseModel();
+        $documents = new DocumentModel();
+
+        $requests = $requestModel->where('status', 'pending')
+                                 ->where('is_deleted', 0)
+                                 ->where('is_canceled', 0)->findAll();
 
         $currentYear = date("Y");
         $data = [
+            'requests' => $requests,
+            'document' => $documents,
             'totalResidents' => $residentModel->where('is_deleted', 0)->countAllResults(),
             'totalPopulation' => $populationModel->where('is_deleted', 0)->countAllResults(),
             'totalActiveRequests' => $requestModel->where('status', 'pending')->countAllResults(),
-            'firecase' => $requestModel->where('is_deleted', 0)->where('YEAR(date_report)', $currentYear)->countAllResults(),
+            'firecase' => $firecaseModel->where('is_deleted', 0)->where('YEAR(date_report)', $currentYear)->countAllResults(),
         ];
 
         return view('admin/dashboard', $data);

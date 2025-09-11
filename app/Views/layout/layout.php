@@ -7,6 +7,7 @@
     <link href="<?= base_url('css/custom.css') ?>" rel="stylesheet">
     <link href="<?= base_url('sweetalert/sweetalert2.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('icons/bootstrap-icons.css') ?>" rel="stylesheet">
+    <link rel="icon" href="<?= base_url('logo/logo.png') ?>" type="image/png">
 
     <title><?= $this->renderSection('title') ?></title>
 

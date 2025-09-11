@@ -15,7 +15,7 @@ class RequestsSeeder extends Seeder
 
         $data = [];
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $doc = $faker->randomElement($documents);
 
             $data[] = [
@@ -32,7 +32,7 @@ class RequestsSeeder extends Seeder
                 'created_at'     => date('Y-m-d H:i:s'),
                 'updated_at'     => date('Y-m-d H:i:s'),
                 'is_deleted'     => 0,
-                'status'         => $faker->randomElement(['pending', 'approved', 'rejected']),
+                'status'         => $faker->randomElement(['pending']),
             ];
         }
 
