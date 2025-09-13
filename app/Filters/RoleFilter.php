@@ -25,16 +25,17 @@ class RoleFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        $session = session();
-
-        // Check if user is logged in
-        if (! $session->get('isLoggedIn')) {
-            return redirect()->to('/login')->with('error', 'You must log in first.');
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login')->with('error', 'You must Login First');
         }
 
-        // If role is required but user doesn't match
-        if ($arguments && ! in_array($session->get('role'), $arguments)) {
-            return redirect()->to('/unauthorized')->with('error', 'Access denied.');
+        if ($arguments && isset($arguments[0])) {
+            $role = $arguments[0];
+
+            // Check user role
+            if (session()->get('role') !== $role) {
+                return redirect()->to('/login')->with('error', 'Invalid User!');
+            }
         }
     }
 

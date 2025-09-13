@@ -14,6 +14,7 @@
         .logout1 {
             transition: padding-right 0.3s ease-in, color 0.3s ease-in;
             color: white;
+            text-decoration: none;
         }
 
         .logout1:hover {
@@ -26,7 +27,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand text-white fw-bold" href="/user">Barangay Dicayas Clearance Issuance</a>
+            <a class="navbar-brand text-white fw-bold" href="/user">Barangay Dicayas Clearance Issuance - <?= session()->get('username') ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -38,7 +39,7 @@
             </div>
         </div>
         <div class="">
-            <a href="" class="btn fw-bold text-white logout1">Logout</a>
+            <a href="/logout" class="me-3 fw-bold text-white logout1">Logout</a>
         </div>
     </nav>
 

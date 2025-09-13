@@ -3,38 +3,34 @@
 
 <?php $this->section('body') ?>
 <div class="m-5">
-    <div class="row align-items-center mt-4">
+    <div class="d-flex justify-content-between align-items-center mt-4">
         <div class="col-3 col-md-3">
-            <h4 class="text-warning">Requests Lists</h4>
+            <h4 class="text-warning">Request History</h4>
         </div>
 
-        <div class="col-3 col-md-3">
-            <form action="">
-                <input type="text" name="search" placeholder="Search requests Here.." class="form-control">
-            </form>
+        <div class="d-flex align-items-center">
+            <div class="me-2 w-50">
+                <form action="">
+                    <input type="text" name="search" placeholder="Search requests Here.." class="form-control">
+                </form>
+            </div>
+            <div class="">
+                <form action="" method="get">
+                    <select name="document" id="" onchange="this.form.submit()" class="form-select">
+                        <option value="">Choose Request Type</option>
+                        <?php $docs = $document->findAll();
+                        foreach ($docs as $d): ?>
+                            <option value="<?= $d['document_id'] ?>"><?= $d['document_name'] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </form>
+            </div>
         </div>
 
-        <div class="col-3 col-md-3">
-            <form action="" method="get">
-                <select name="document" id="" onchange="this.form.submit()" class="form-select">
-                    <option value="">Choose Request Type</option>
-                    <?php $docs = $document->findAll();
-                    foreach ($docs as $d): ?>
-                        <option value="<?= $d['document_id'] ?>"><?= $d['document_name'] ?></option>
-                    <?php endforeach ?>
-                </select>
-            </form>
-        </div>
 
-        <div class="col-3 col-md-3">
-            <form action="" method="get">
-                <select name="filter" id="" onchange="this.form.submit()" class="form-select">
-                    <option class="text-center" value="">Choose Status</option>
-                    <option value="approved">Aprroved/Done</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="pending">Pending</option>
-                </select>
-            </form>
+
+        <div class="">
+            <button class="btn btn-primary"><i class="bi bi-file-earmark-text"></i> Make Request</button>
         </div>
     </div>
     <div class="border-bottom border-2 border-orange mt-3 mb-2"></div>
@@ -65,12 +61,14 @@
                                 echo esc($doc['document_name']);
                                 ?>
                             </td>
-                            <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?></td>
+                            <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?>
+                            </td>
                             <td><?= esc($request['sex']) ?></td>
                             <td><?= esc($request['purok']) ?></td>
                             <td><?= esc($request['contact_no']) ?></td>
                             <td>
-                                <button class="btn btn-light btn-sm border border-1" data-bs-target="#img_<?= $request['request_id'] ?>" data-bs-toggle="modal">View</button>
+                                <button class="btn btn-light btn-sm border border-1"
+                                    data-bs-target="#img_<?= $request['request_id'] ?>" data-bs-toggle="modal">View</button>
                             </td>
                             <?php
                             $color = null;
@@ -89,21 +87,21 @@
                             ?>
                             <td><span class="badge text-bg-<?= $color ?> text-white"><?= ucfirst($status) ?></span></td>
                             <td><?php
-                                if ($status !== 'rejected' && $status !== 'approved'): ?>
+                            if ($status !== 'rejected' && $status !== 'approved'): ?>
 
                                     <div class="d-flex justify-content-center">
-                                        <button class="btn btn-success btn-sm"
+                                        <button class="btn btn-primary btn-sm"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
                                             data-bs-toggle="modal" data-bs-target="#approve_<?= esc($request['request_id']) ?>">
-                                            <i class="bi bi-check-circle me-2"></i>
-                                            Approve
+                                            <i class="bi bi-pencil me-2"></i>
+                                            Update
                                         </button>
 
                                         <button class="ms-2 btn btn-danger btn-sm"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
                                             data-bs-toggle="modal" data-bs-target="#reject_<?= esc($request['request_id']) ?>">
                                             <i class="bi bi-x-circle me-2"></i>
-                                            Reject
+                                            Cancel
                                         </button>
                                     </div>
 
@@ -140,7 +138,8 @@
                                         <span class="btn btn-close" data-bs-dismiss="modal"></span>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="fs-3 text-center text-success">Are you sure you want to approve this request?</p>
+                                        <p class="fs-3 text-center text-success">Are you sure you want to approve this request?
+                                        </p>
                                     </div>
                                     <div class="modal-footer">
                                         <form action="/admin/requests/approve" method="POST">
@@ -161,7 +160,8 @@
                                         <span class="btn btn-close" data-bs-dismiss="modal"></span>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="fs-3 text-center text-danger">Are you sure you want to reject this request?</p>
+                                        <p class="fs-3 text-center text-danger">Are you sure you want to reject this request?
+                                        </p>
                                     </div>
                                     <div class="modal-footer">
                                         <form action="/admin/requests/reject" method="POST">

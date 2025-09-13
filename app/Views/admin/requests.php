@@ -44,7 +44,7 @@
         <table class="table table-striped">
             <thead class="sticky-top table-dark">
                 <tr>
-                    <th>Request ID</th>
+                    <th>Date Requested</th>
                     <th>Document</th>
                     <th>Requestor</th>
                     <th>Sex</th>
@@ -59,7 +59,7 @@
                 <?php if ($requests): ?>
                     <?php foreach ($requests as $request): ?>
                         <tr>
-                            <td><?= esc($request['request_id']) ?></td>
+                            <td><?= esc(date('F d, Y - h:i A', strtotime($request['created_at']))) ?></td>
                             <td>
                                 <?php
                                 $doc = $document->where('document_id', $request['request_type'])->first();

@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="">
-            <a href="" class="btn fw-bold text-white logout1">Logout</a>
+            <a href="/logout" class="btn fw-bold text-white logout1">Logout</a>
         </div>
     </nav>
 

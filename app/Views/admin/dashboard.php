@@ -61,7 +61,7 @@
 
 <div class="container mt-5">
     <div class="table-responsive" style="height: 50vh">
-        <table class="table">
+        <table class="table table-striped">
             <thead class="sticky-top">
                 <tr>
                     <th>Request ID</th>

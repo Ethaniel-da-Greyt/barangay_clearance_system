@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\RoleFilter;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -34,7 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
-        'role'     => \App\Filters\RoleFilter::class,
+        'role'          => RoleFilter::class,
     ];
 
     /**
@@ -76,7 +77,7 @@ class Filters extends BaseFilters
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
-            'auth' => ['except' => ['login/*', 'register/*', '/']],
+            'role' => ['except' => ['/login', '/register', '/']],
         ],
         'after' => [
             // 'honeypot',
