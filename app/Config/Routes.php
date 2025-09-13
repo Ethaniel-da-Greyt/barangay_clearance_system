@@ -41,6 +41,8 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
 $routes->group('', ['filter' => 'role:resident'], function($routes){
 
     $routes->get('/resident', 'ResidentController::user');
+    $routes->get('/resident/check-notifications', 'ResidentController::checkNotifications');
+
 });
 
 $routes->get('/logout', 'LoginController::logout');    

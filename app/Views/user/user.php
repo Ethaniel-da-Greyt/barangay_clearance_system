@@ -18,9 +18,9 @@
                 <form action="" method="get">
                     <select name="document" id="" onchange="this.form.submit()" class="form-select">
                         <option value="">Choose Request Type</option>
-                        <?php $docs = $document->findAll();
+                        <?php $docs = $document->where('is_deleted', 0)->findAll();
                         foreach ($docs as $d): ?>
-                            <option value="<?= $d['document_id'] ?>"><?= $d['document_name'] ?></option>
+                            <option value="<?= $d['document_name'] ?>"><?= $d['document_name'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </form>
@@ -30,7 +30,10 @@
 
 
         <div class="">
-            <button class="btn btn-primary"><i class="bi bi-file-earmark-text"></i> Make Request</button>
+            <button class="btn btn-orange text-white" data-bs-target="#make_request" data-bs-toggle="modal">
+                <i class="bi bi-file-earmark-text"></i>
+                 Make Request
+            </button>
         </div>
     </div>
     <div class="border-bottom border-2 border-orange mt-3 mb-2"></div>
@@ -39,6 +42,7 @@
         <table class="table table-striped">
             <thead class="sticky-top table-dark">
                 <tr>
+                    <th>Date Requested</th>
                     <th>Request ID</th>
                     <th>Document</th>
                     <th>Requestor</th>
@@ -46,6 +50,7 @@
                     <th>Purok</th>
                     <th>Contact</th>
                     <th>Photo</th>
+                    <th>Fee</th>
                     <th>Status</th>
                     <th class="text-center">Action</th>
                 </tr>
@@ -54,11 +59,12 @@
                 <?php if ($requests): ?>
                     <?php foreach ($requests as $request): ?>
                         <tr>
+                            <td><?= esc(date('F d, Y  h:i A', strtotime($request['created_at']))) ?></td>
                             <td><?= esc($request['request_id']) ?></td>
                             <td>
                                 <?php
-                                $doc = $document->where('document_id', $request['request_type'])->first();
-                                echo esc($doc['document_name']);
+                                $doc = $document->where('document_name', $request['request_type'])->first();
+                                if($doc){echo esc($doc['document_name']);}else{echo '-';};
                                 ?>
                             </td>
                             <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?>
@@ -70,6 +76,7 @@
                                 <button class="btn btn-light btn-sm border border-1"
                                     data-bs-target="#img_<?= $request['request_id'] ?>" data-bs-toggle="modal">View</button>
                             </td>
+                            <td>P<?= esc(number_format($doc['fee'], 2)) ?></td>
                             <?php
                             $color = null;
                             $status = esc($request['status']);

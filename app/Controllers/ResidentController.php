@@ -18,4 +18,24 @@ class ResidentController extends BaseController
 
         return view('user/user', ['document' => $docs, 'requests' => $requests]);
     }
+
+    public function checkNotifications()
+    {
+        $userId = session()->get('user_id');
+        $requestsModel = new RequestsModel();
+        $document = new DocumentModel();
+
+        $requests = $requestsModel
+            ->where('requestor_id', $userId)
+            ->whereIn('status', ['approved', 'rejected'])
+            ->where('notified', 0)
+            ->findAll(); 
+
+        // Mark them as notified so they won’t fire again
+        foreach ($requests as $req) {
+            $requestsModel->update($req['id'], ['notified' => 1]);
+        }
+
+        return $this->response->setJSON($requests);
+    }
 }

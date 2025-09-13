@@ -45,12 +45,14 @@
             <thead class="sticky-top table-dark">
                 <tr>
                     <th>Date Requested</th>
+                    <th>Request ID</th>
                     <th>Document</th>
                     <th>Requestor</th>
                     <th>Sex</th>
                     <th>Purok</th>
                     <th>Contact</th>
                     <th>Photo</th>
+                    <th>Fee</th>
                     <th>Status</th>
                     <th class="text-center">Action</th>
                 </tr>
@@ -60,10 +62,11 @@
                     <?php foreach ($requests as $request): ?>
                         <tr>
                             <td><?= esc(date('F d, Y - h:i A', strtotime($request['created_at']))) ?></td>
+                            <td><?= esc($request['request_id']) ?></td>
                             <td>
                                 <?php
-                                $doc = $document->where('document_id', $request['request_type'])->first();
-                                echo esc($doc['document_name']);
+                                $doc = $document->where('document_name', $request['request_type'])->first();
+                                if($doc){echo esc($doc['document_name']);}else{echo '-';};
                                 ?>
                             </td>
                             <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?></td>
@@ -73,6 +76,7 @@
                             <td>
                                 <button class="btn btn-light btn-sm border border-1" data-bs-target="#img_<?= $request['request_id'] ?>" data-bs-toggle="modal">View</button>
                             </td>
+                            <td>P<?= esc(number_format($doc['fee'], 2)) ?></td>
                             <?php
                             $color = null;
                             $status = esc($request['status']);
@@ -208,6 +212,9 @@
                 <?php endif ?>
             </tbody>
         </table>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <?= $pager->links('default', 'bootstrap') ?>
     </div>
 </div>
 

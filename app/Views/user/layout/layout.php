@@ -27,7 +27,8 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand text-white fw-bold" href="/user">Barangay Dicayas Clearance Issuance - <?= session()->get('username') ?></a>
+            <a class="navbar-brand text-white fw-bold" href="/user">Barangay Dicayas Clearance Issuance -
+                <?= ucfirst(session()->get('username')) ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -48,7 +49,7 @@
 
     <?php if (session()->getFlashdata('success')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -61,7 +62,7 @@
 
     <?php if (session()->getFlashdata('error')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -71,7 +72,29 @@
             });
         </script>
     <?php endif; ?>
+<script>
+        function checkNotifications() {
+            fetch('/resident/check-notifications')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(req => {
+                            Swal.fire({
+                                icon: req.status === 'approved' ? 'success' : 'error',
+                                title: req.status === 'approved' ? 'Request Approved!' : 'Request Rejected',
+                                text: `Your request ${req.request_type} has been ${req.status}.`,
+                                // timer: 4000,
+                                showConfirmButton: true
+                            });
+                        });
+                    }
+                })
+                .catch(err => console.error(err));
+        }
 
+        // Poll every 5 seconds
+        setInterval(checkNotifications, 5000);
+    </script>
     <script src="<?= base_url('sweetalert/sweetalert2.min.js') ?>"></script>
     <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
 </body>

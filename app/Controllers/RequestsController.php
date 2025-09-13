@@ -13,18 +13,19 @@ class RequestsController extends BaseController
     public function store()
     {
         try {
+            $model = new RequestsModel;
             $validation = Services::validation();
 
             $rules = [
-                'request_type'      => 'required',
-                'firstname'         => 'required',
-                'middle_initial'    => 'permit_empty',
-                'lastname'          => 'required',
-                'suffix'            => 'permit_empty',
-                'sex'               => 'required',
-                'purok'             => 'required',
-                'contact_no'        => 'required',
-                'photo'             => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]|max_size[photo,2048]',
+                'request_type' => 'required',
+                'firstname' => 'required',
+                'middle_initial' => 'permit_empty',
+                'lastname' => 'required',
+                'suffix' => 'permit_empty',
+                'sex' => 'required',
+                'purok' => 'required',
+                'contact_no' => 'required',
+                'photo' => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]|max_size[photo,2048]',
             ];
 
             if (!$this->validate($rules)) {
@@ -55,8 +56,14 @@ class RequestsController extends BaseController
                 }
             }
 
-            $requestor_id = $this->request->getPost('requestor_id');
-            
+            $requestor_id = session()->get('user_id');
+            $request = $model->where('DATE(created_at)', date('y-m-d'))
+                ->where('requestor_id', $requestor_id)
+                ->countAllResults();
+            if ($request >= 3) {
+                return redirect()->back()->with('error', 'You have reached the maximum of 3 requests for today.');
+            }
+
             $data = [
                 'request_id' => $request_id,
                 'requestor_id' => $requestor_id,
@@ -71,11 +78,10 @@ class RequestsController extends BaseController
                 'photo' => $path_file,
             ];
 
-            $user = new RequestsModel();
-            $user->save($data);
+            $model->save($data);
 
-            return redirect()->to('/admin/requests')
-                ->with('success', $this->request->getPost('firstname') . ' Added Successfully');
+            return redirect()->back()
+                ->with('success', $this->request->getPost('request_id') . ' Requested Successfully');
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -150,7 +156,7 @@ class RequestsController extends BaseController
         }
     }
 
-    //Approve Requests
+    // Approve Requests
     public function approve()
     {
         try {
@@ -161,17 +167,28 @@ class RequestsController extends BaseController
                 ->where('is_deleted', 0)
                 ->where('is_canceled', 0)
                 ->first();
-            $data = ['status' => 'approved'];
+
+            if (!$request_find) {
+                return redirect()->back()->with('error', 'Request not found.');
+            }
+
+            $data = [
+                'status' => 'approved',
+                'notified' => 0 // mark as not yet notified for resident
+            ];
+
             $approve = $request->update($id, $data);
 
             if (!$approve) {
                 return redirect()->back()->with('error', 'Failed to Approve the request');
             }
+
             return redirect()->back()->with('success', $request_find['request_id'] . ' Request Approved');
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
 
     //Reject Request
     public function reject()
@@ -184,17 +201,30 @@ class RequestsController extends BaseController
                 ->where('is_deleted', 0)
                 ->where('is_canceled', 0)
                 ->first();
-            $data = ['status' => 'approved'];
-            $approve = $request->update($id, $data);
 
-            if (!$approve) {
-                return redirect()->back()->with('error', 'Failed to Approve the request');
+            if (!$request_find) {
+                return redirect()->back()->with('error', 'Request not found.');
             }
+
+            $data = [
+                'status' => 'rejected',
+                'notified' => 0
+            ];
+
+            $reject = $request->update($id, $data);
+
+            if (!$reject) {
+                return redirect()->back()->with('error', 'Failed to Reject the request');
+            }
+
             return redirect()->back()->with('success', $request_find['request_id'] . ' Request Rejected');
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+
+
 
     // public function request_id()
     // {

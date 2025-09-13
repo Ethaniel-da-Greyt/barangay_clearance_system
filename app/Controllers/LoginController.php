@@ -43,7 +43,7 @@ class LoginController extends BaseController
                         'role' => 'admin',
                         'isLoggedIn' => true
                     ]);
-                    return redirect()->to('/admin')->with('success', 'Hello, ' . $user['username'] . '!');
+                    return redirect()->to('/admin');
                 } elseif ($user['role'] == 'resident') {
                     session()->set([
                         'user_id' => $user['user_id'],
@@ -51,7 +51,7 @@ class LoginController extends BaseController
                         'role' => 'resident',
                         'isLoggedIn' => true
                     ]);
-                    return redirect()->to('/resident')->with('success', 'Hello, ' . $user['username'] . '!');
+                    return redirect()->to('/resident');
                 }else{
                     return redirect()->to('/login')->with('error','Unauthorized');
                 }

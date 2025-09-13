@@ -25,6 +25,8 @@ class RequestsModel extends Model
         'photo',
         'status',
         'is_deleted',
+        'is_canceled',
+        'notified',
 
     ];
 
