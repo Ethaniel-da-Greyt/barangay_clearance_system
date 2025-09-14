@@ -75,7 +75,7 @@
                 <?php foreach($requests as $request) : ?>
                 <tr>
                     <td><?= $request['request_id'] ?></td>
-                    <td><?php $documents = $document->where('document_id', $request['request_type'])->first();
+                    <td><?php $documents = $document->where('document_name', $request['request_type'])->first();
                     echo esc($documents['document_name']) ?></td>
                     <td><?= esc(
                         $request['firstname']. " " .

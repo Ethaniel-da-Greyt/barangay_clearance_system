@@ -41,6 +41,7 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
 $routes->group('', ['filter' => 'role:resident'], function($routes){
 
     $routes->get('/resident', 'ResidentController::user');
+    $routes->post('/resident/make-request', 'RequestsController::store');
     $routes->get('/resident/check-notifications', 'ResidentController::checkNotifications');
 
 });

@@ -40,12 +40,14 @@ class LoginController extends BaseController
                     session()->set([
                         'user' => $user,
                         'user_id' => $user['user_id'],
+                        'username' => $user['username'],
                         'role' => 'admin',
                         'isLoggedIn' => true
                     ]);
                     return redirect()->to('/admin');
                 } elseif ($user['role'] == 'resident') {
                     session()->set([
+                        'user' => $user,
                         'user_id' => $user['user_id'],
                         'username' => $user['username'], 
                         'role' => 'resident',

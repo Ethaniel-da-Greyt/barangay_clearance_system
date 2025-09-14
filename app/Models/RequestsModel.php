@@ -14,6 +14,7 @@ class RequestsModel extends Model
     protected $protectFields = true;
     protected $allowedFields = [
         'request_id',
+        'requestor_id',
         'request_type',
         'firstname',
         'middle_initial',

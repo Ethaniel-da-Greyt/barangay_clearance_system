@@ -25,43 +25,42 @@ class RequestsController extends BaseController
                 'sex' => 'required',
                 'purok' => 'required',
                 'contact_no' => 'required',
-                'photo' => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]|max_size[photo,2048]',
+                'photo' => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png,image/webp]|max_size[photo,2048]',
             ];
 
             if (!$this->validate($rules)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
 
-            $user_id = $this->request->getPost('user_id');
+            $today = date('Y-m-d');
+            $requestor_id = session()->get('user_id');
+            $request = $model->where('created_at >=', $today . ' 00:00:00')
+                ->where('created_at <=', $today . ' 23:59:59')
+                ->where('requestor_id', $requestor_id)
+                ->countAllResults();
+            if ($request >= 3) {
+                return redirect()->back()->with('error', 'You have reached the maximum of 3 requests for today.');
+            }
+
+            $user_id = $requestor_id;
             $request_id = "REQ-" . uniqid();
 
-            $path = FCPATH . 'uploads/avatar/' . $user_id . '/requirements/' . $request_id . '/';
-            if (!is_dir($path)) {
-                mkdir($path, 0777, true);
+            $uploadPath = 'uploads/avatar/' . $user_id . '/requirements/' . $request_id . '/';
+            $fullPath = FCPATH . $uploadPath;
+
+            if (!is_dir($fullPath)) {
+                mkdir($fullPath, 0755, true); 
             }
 
             $img = $this->request->getFile('photo');
 
             if ($img && $img->isValid() && !$img->hasMoved()) {
                 $imgName = $img->getRandomName();
-                $img->move($path, $imgName);
-                $path_file = $path . $imgName;
+                $img->move($fullPath, $imgName);
+                $photoPath = $uploadPath . $imgName; 
             } else {
-                $defaultPhoto = FCPATH . 'uploads/No_image.png';
-                $imgName = 'No_image.png';
-                $path_file = $path . $imgName;
 
-                if (file_exists($defaultPhoto)) {
-                    copy($defaultPhoto, $path . $imgName);
-                }
-            }
-
-            $requestor_id = session()->get('user_id');
-            $request = $model->where('DATE(created_at)', date('y-m-d'))
-                ->where('requestor_id', $requestor_id)
-                ->countAllResults();
-            if ($request >= 3) {
-                return redirect()->back()->with('error', 'You have reached the maximum of 3 requests for today.');
+                $photoPath = 'uploads/No_image.png';
             }
 
             $data = [
@@ -75,7 +74,7 @@ class RequestsController extends BaseController
                 'sex' => $this->request->getPost('sex'),
                 'purok' => $this->request->getPost('purok'),
                 'contact_no' => $this->request->getPost('contact_no'),
-                'photo' => $path_file,
+                'photo' => $photoPath, 
             ];
 
             $model->save($data);

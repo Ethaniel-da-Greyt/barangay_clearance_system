@@ -128,9 +128,9 @@
                                         <h4 class="modal-title text-dark">Photo of Requirement</h4>
                                         <span class="btn btn-close btn-light" data-bs-dismiss="modal"></span>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body text-center">
                                         <picture>
-                                            <img src="<?= $request['photo'] ?>" alt="No Photo">
+                                            <img src="<?= base_url($request['photo'] ?? '') ?>" alt="No Photo" width="450">
                                         </picture>
                                     </div>
                                 </div>

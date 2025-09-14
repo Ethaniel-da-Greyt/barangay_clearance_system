@@ -14,7 +14,7 @@ class ResidentController extends BaseController
         $docs = new DocumentModel();
         $req = new RequestsModel();
         $session = session();
-        $requests = $req->where('requestor_id', $session->get('user_id'))->findAll(); 
+        $requests = $req->where('requestor_id', $session->get('user_id'))->orderBy('created_at', 'DESC')->findAll(); 
 
         return view('user/user', ['document' => $docs, 'requests' => $requests]);
     }
