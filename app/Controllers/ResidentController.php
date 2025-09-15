@@ -12,9 +12,33 @@ class ResidentController extends BaseController
     public function user()
     {
         $docs = new DocumentModel();
-        $req = new RequestsModel();
+        $model = new RequestsModel();
+
+        $document = $this->request->getGet('document');
+        $search = $this->request->getGet('search');
+
+
+        $query = $model->where('is_deleted', 0);
+
+
+
+        if (!empty($document)) {
+            $query->where('request_type', $document);
+        }
+
+
+        if (!empty($search)) {
+            $query->groupStart()
+                ->like('firstname', $search)
+                ->orLike('lastname', $search)
+                ->orLike('middle_initial', $search)
+                ->orLike('request_id', $search)
+                ->orLike('contact_no', $search)
+                ->orLike('purok', $search)
+                ->groupEnd();
+        }
         $session = session();
-        $requests = $req->where('requestor_id', $session->get('user_id'))->orderBy('created_at', 'DESC')->findAll(); 
+        $requests = $model->where('requestor_id', $session->get('user_id'))->orderBy('created_at', 'DESC')->findAll(); 
 
         return view('user/user', ['document' => $docs, 'requests' => $requests]);
     }
