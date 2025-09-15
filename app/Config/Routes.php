@@ -42,6 +42,9 @@ $routes->group('', ['filter' => 'role:resident'], function($routes){
 
     $routes->get('/resident', 'ResidentController::user');
     $routes->post('/resident/make-request', 'RequestsController::store');
+    $routes->post('/resident/request/resubmit', 'RequestsController::reSubmit');
+    $routes->post('/resident/request/cancel', 'RequestsController::cancel');
+    $routes->post('/resident/update', 'RequestsController::update');
     $routes->get('/resident/check-notifications', 'ResidentController::checkNotifications');
 
 });

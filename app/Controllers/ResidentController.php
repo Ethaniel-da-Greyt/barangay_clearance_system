@@ -31,7 +31,7 @@ class ResidentController extends BaseController
             ->where('notified', 0)
             ->findAll(); 
 
-        // Mark them as notified so they won’t fire again
+        // Mark them as notified so they won’t notified again
         foreach ($requests as $req) {
             $requestsModel->update($req['id'], ['notified' => 1]);
         }

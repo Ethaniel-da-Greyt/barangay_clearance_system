@@ -49,7 +49,7 @@ class RequestsController extends BaseController
             $fullPath = FCPATH . $uploadPath;
 
             if (!is_dir($fullPath)) {
-                mkdir($fullPath, 0755, true); 
+                mkdir($fullPath, 0755, true);
             }
 
             $img = $this->request->getFile('photo');
@@ -57,7 +57,7 @@ class RequestsController extends BaseController
             if ($img && $img->isValid() && !$img->hasMoved()) {
                 $imgName = $img->getRandomName();
                 $img->move($fullPath, $imgName);
-                $photoPath = $uploadPath . $imgName; 
+                $photoPath = $uploadPath . $imgName;
             } else {
 
                 $photoPath = 'uploads/No_image.png';
@@ -74,15 +74,15 @@ class RequestsController extends BaseController
                 'sex' => $this->request->getPost('sex'),
                 'purok' => $this->request->getPost('purok'),
                 'contact_no' => $this->request->getPost('contact_no'),
-                'photo' => $photoPath, 
+                'photo' => $photoPath,
             ];
 
             $model->save($data);
 
-            return redirect()->back()
-                ->with('success', $this->request->getPost('request_id') . ' Requested Successfully');
+            return redirect()->to('/resident')
+                ->with('success', $request_id . ' Requested Successfully');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->to('/resident')->with('error', $e->getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ class RequestsController extends BaseController
                 'sex' => 'permit_empty',
                 'purok' => 'required',
                 'contact_no' => 'required',
-                'photo' => 'permit_empty',
+                'photo' => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png,image/webp]|max_size[photo,2048]',
             ];
 
             if (!$this->validate($rules)) {
@@ -110,13 +110,35 @@ class RequestsController extends BaseController
             }
 
 
-            $findRequest = $model->where('id', $id)->first();
+            $findRequest = $model->find($id);
             if (!$findRequest) {
-                return redirect()->back()->with('error', 'User not found.');
+                return redirect()->back()->with('error', 'Request not found.');
+            }
+
+
+            $img = $this->request->getFile('photo');
+            $photoPath = $findRequest['photo'];
+
+            if ($img && $img->isValid() && !$img->hasMoved()) {
+                if ($photoPath && file_exists(FCPATH . $photoPath) && $photoPath !== 'uploads/No_image.png') {
+                    unlink(FCPATH . $photoPath);
+                }
+
+                $user_id = $findRequest['requestor_id'] ?? session()->get('user_id');
+                $request_id = $findRequest['request_id'];
+                $uploadPath = 'uploads/avatar/' . $user_id . '/requirements/' . $request_id . '/';
+                $fullPath = FCPATH . $uploadPath;
+                if (!is_dir($fullPath)) {
+                    mkdir($fullPath, 0755, true);
+                }
+
+                $imgName = $img->getRandomName();
+                $img->move($fullPath, $imgName);
+                $photoPath = $uploadPath . $imgName;
             }
 
             $data = [
-                'request_type' => $this->request->getPost('firstname'),
+                'request_type' => $this->request->getPost('request_type'),
                 'firstname' => $this->request->getPost('firstname'),
                 'middle_initial' => $this->request->getPost('middle_initial'),
                 'lastname' => $this->request->getPost('lastname'),
@@ -124,34 +146,54 @@ class RequestsController extends BaseController
                 'sex' => $this->request->getPost('sex'),
                 'purok' => $this->request->getPost('purok'),
                 'contact_no' => $this->request->getPost('contact_no'),
-                'photo' => $this->request->getPost('photo'),
+                'photo' => $photoPath,
             ];
 
             $model->update($id, $data);
 
-            return redirect()->back()->with('success', $data['request_type'] . ' updated successfully!');
+            return redirect()->to('/resident')->with('success', $findRequest['request_id'] . ' updated successfully!');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->to('/resident')->with('error', $e->getMessage());
         }
     }
 
-
-    public function delete()
+    public function reSubmit()
     {
         try {
-            $user = new RequestsModel();
+            $model = new RequestsModel();
             $id = $this->request->getPost('id');
-            $find = $user->where('is_deleted', 0)->where('id', $id)->first();
 
-            if ($find) {
-                $data['is_deleted'] = 1;
-                $user->update($id, $data);
-                return redirect()->back()->with('success', $find['firstname'] . ' Deleted Successfully');
+            $request = $model->where('is_deleted', 0)
+                ->where('is_canceled', 1)
+                ->where('id', $id);
+            if (!$request) {
+                return redirect()->to('/resident')->with('error', 'Unable to submit your request');
             }
+            $data['is_canceled'] = 0;
+            $request->update($id, $data);
 
-            return redirect()->back()->with('error', $find['firstname'] . ' already deleted');
+            return redirect()->to('/resident')->with('success', 'You Successfully Resubmit your request');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->to('/resident')->with('error', $e->getMessage());
+        }
+    }
+
+    public function cancel()
+    {
+        try {
+            $request = new RequestsModel();
+            $id = $this->request->getPost('id');
+            $find = $request->where('is_deleted', 0)->where('id', $id)->first();
+
+            if (!$find) {
+                return redirect()->back()->with('error', $find['request_id'] . ' already Canceled');
+            }
+            $data['is_canceled'] = 1;
+            $request->update($id, $data);
+            return redirect()->to('/resident')->with('success', $find['request_type'] . ' Canceled Successfully');
+
+        } catch (Exception $e) {
+            return redirect()->to('/resident')->with('error', $e->getMessage());
         }
     }
 
