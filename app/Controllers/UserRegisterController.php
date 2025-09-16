@@ -37,17 +37,27 @@ class UserRegisterController extends BaseController
         }
 
         $userId = $userFind['user_id'];
-        $path = FCPATH . 'uploads/avatar/' . $userId . '/';
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+        $uploadPath = 'uploads/avatar/' . $userId . '/';
+        $fullPath = FCPATH . $uploadPath;
+
+        if (!is_dir($fullPath)) {
+            mkdir($fullPath, 0777, true);
         }
 
         $img = $this->request->getFile('photo');
-        $imgName = $userFind['photo'];
+        $imgPath = $userFind['photo'];
 
         if ($img && $img->isValid() && !$img->hasMoved()) {
             $imgName = $img->getRandomName();
-            $img->move($path, $imgName);
+            $img->move($fullPath, $imgName);
+            $newPath = $uploadPath . $imgName;
+
+            // delete old photo if it exists and is not the same as new one
+            if (!empty($imgPath) && file_exists(FCPATH . $imgPath)) {
+                unlink(FCPATH . $imgPath);
+            }
+
+            $imgPath = $newPath;
         }
 
         $data = [
@@ -58,7 +68,7 @@ class UserRegisterController extends BaseController
             'purok' => $this->request->getPost('purok'),
             'username' => $this->request->getPost('username'),
             'role' => $this->request->getPost('role'),
-            'photo' => $imgName,
+            'photo' => $imgPath,
         ];
 
         $user->update($id, $data);
@@ -89,23 +99,26 @@ class UserRegisterController extends BaseController
 
         $userId = $this->UserId();
 
-        $path = FCPATH . 'uploads/avatar/' . $userId . '/';
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+        $uploadPath = 'uploads/avatar/' . $userId . '/';
+        $fullPath = FCPATH . $uploadPath;
+
+        if (!is_dir($fullPath)) {
+            mkdir($fullPath, 0777, true);
         }
 
         $img = $this->request->getFile('photo');
 
         if ($img && $img->isValid() && !$img->hasMoved()) {
             $imgName = $img->getRandomName();
-            $img->move($path, $imgName);
-        } else {
-            $defaultPhoto = FCPATH . 'uploads/no_photo.jpg';
-            $imgName = 'no_photo.jpg';
+            $img->move($fullPath, $imgName);
+            $newPath = $uploadPath . $imgName;
 
-            if (file_exists($defaultPhoto)) {
-                copy($defaultPhoto, $path . $imgName);
+            // delete old photo if it exists and is not the same as new one
+            if (!empty($imgPath) && file_exists(FCPATH . $imgPath)) {
+                unlink(FCPATH . $imgPath);
             }
+
+            $imgPath = $newPath;
         }
 
         $data = [
@@ -118,7 +131,7 @@ class UserRegisterController extends BaseController
             'username' => $this->request->getPost('username'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'role' => $this->request->getPost('role'),
-            'photo' => $imgName,
+            'photo' => $imgPath,
         ];
 
         $user = new RegisterUserModel();

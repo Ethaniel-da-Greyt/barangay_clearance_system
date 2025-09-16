@@ -1,6 +1,6 @@
 <?php $this->extend('user/layout/layout'); ?>
 <?php $this->section('title'); ?> Welcome nig <?php $this->endSection(); ?>
-
+<?php $this->section('home') ?>fw-bold border-bottom border-orange border-2<?php $this->endSection() ?>
 <?php $this->section('body') ?>
 <div class="m-5">
     <div class="d-flex justify-content-between align-items-center mt-4">

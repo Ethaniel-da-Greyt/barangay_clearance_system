@@ -27,15 +27,19 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand text-white fw-bold" href="/user">Barangay Dicayas Clearance Issuance -
-                <?= ucfirst(session()->get('username')) ?></a>
+            <a class="navbar-brand text-white fw-bold" href="/user">Barangay Dicayas Clearance Issuance</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-
+                <ul class="navbar-nav gap-3">
+                    <div class="">
+                        <a href="/resident" class="nav-link text-white <?= $this->renderSection('home') ?>">Home</a>
+                    </div>
+                    <div class="">
+                        <a href="/resident/profile" class="nav-link text-white <?= $this->renderSection('profile') ?>">Profile</a>
+                    </div>
                 </ul>
             </div>
         </div>

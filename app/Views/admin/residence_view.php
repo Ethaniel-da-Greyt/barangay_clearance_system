@@ -51,7 +51,7 @@
                             <td class="d-flex justify-content-center align-items-center">
                                 <a data-bs-toggle="modal" data-bs-target="#photo_<?= esc($resident['user_id']) ?>">
                                     <img class="rounded-circle"
-                                        src="<?= base_url('uploads/avatar/' . esc($resident['user_id']) . '/' . esc($resident['photo'])) ?>"
+                                        src="<?= base_url(esc($resident['photo'])) ?>"
                                         width="50" alt="avatar">
                                 </a>
                             </td>
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <form action="/admin/residents/default" method="post">
-                                            <input type="hidden" name="id" value="id">
+                                            <input type="hidden" name="id" value="<?= $resident['id'] ?>">
                                             <button class="btn btn-warning text-white">Default Password</button>
                                         </form>
                                         <span class="btn btn-secondary" data-bs-dismiss="modal">Cancel</span>
@@ -192,7 +192,7 @@
                                             </div>
 
                                             <div class="mb-2">
-                                                <label for="" class="form-label">Upload Photo <span
+                                                <label for="" class="form-label">Update Photo <span
                                                         class="text-secondary">(Optional)</span></label>
                                                 <input type="file" name="photo" id="" class="form-control">
                                             </div>

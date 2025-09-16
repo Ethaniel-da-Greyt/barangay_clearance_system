@@ -41,6 +41,8 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
 $routes->group('', ['filter' => 'role:resident'], function($routes){
 
     $routes->get('/resident', 'ResidentController::user');
+    $routes->get('/resident/profile', 'ResidentController::profile');
+    $routes->post('/resident/profile/update', 'ResidentController::updateProfile');
     $routes->post('/resident/make-request', 'RequestsController::store');
     $routes->post('/resident/request/resubmit', 'RequestsController::reSubmit');
     $routes->post('/resident/request/cancel', 'RequestsController::cancel');
@@ -54,3 +56,4 @@ $routes->get('/logout', 'LoginController::logout');
 $routes->get('/', 'LoginController::index');
 $routes->get('/login', 'LoginController::index');
 $routes->post('/login', 'LoginController::login');
+
