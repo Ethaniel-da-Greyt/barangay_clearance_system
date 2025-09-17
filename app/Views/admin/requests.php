@@ -21,7 +21,7 @@
                     <option value="">Choose Request Type</option>
                     <?php $docs = $document->findAll();
                     foreach ($docs as $d): ?>
-                        <option value="<?= $d['document_id'] ?>"><?= $d['document_name'] ?></option>
+                        <option value="<?= $d['document_name'] ?>"><?= $d['document_name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </form>
@@ -66,7 +66,11 @@
                             <td>
                                 <?php
                                 $doc = $document->where('document_name', $request['request_type'])->first();
-                                if($doc){echo esc($doc['document_name']);}else{echo '-';};
+                                if ($doc) {
+                                    echo esc($doc['document_name']);
+                                } else {
+                                    echo '-';
+                                };
                                 ?>
                             </td>
                             <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?></td>
@@ -207,7 +211,7 @@
                     <?php endforeach ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="10" class="text-center">No Request Found</td>
+                        <td colspan="11" class="text-center">No Request Found</td>
                     </tr>
                 <?php endif ?>
             </tbody>

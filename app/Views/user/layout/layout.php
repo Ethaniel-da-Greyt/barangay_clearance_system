@@ -27,13 +27,13 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand text-white fw-bold" href="/user">Barangay Dicayas Clearance Issuance</a>
+            <a class="navbar-brand text-white fw-bold me-5" href="/resident">Barangay Dicayas Clearance Issuance</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav gap-3">
+                <ul class="navbar-nav gap-3 ms-5">
                     <div class="">
                         <a href="/resident" class="nav-link text-white <?= $this->renderSection('home') ?>">Home</a>
                     </div>
@@ -53,7 +53,7 @@
 
     <?php if (session()->getFlashdata('success')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -66,7 +66,7 @@
 
     <?php if (session()->getFlashdata('error')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -76,7 +76,7 @@
             });
         </script>
     <?php endif; ?>
-<script>
+    <script>
         function checkNotifications() {
             fetch('/resident/check-notifications')
                 .then(res => res.json())
@@ -89,6 +89,10 @@
                                 text: `Your request ${req.request_type} has been ${req.status}.`,
                                 // timer: 4000,
                                 showConfirmButton: true
+                            }).then(result => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
                             });
                         });
                     }

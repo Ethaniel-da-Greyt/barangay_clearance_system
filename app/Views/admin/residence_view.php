@@ -118,7 +118,7 @@
 
                                     <div class="modal-body d-flex justify-content-center">
                                         <img class="rounded"
-                                            src="<?= base_url('uploads/avatar/' . esc($resident['user_id']) . '/' . $resident['photo']) ?>"
+                                            src="<?= base_url($resident['photo']) ?>"
                                             width="400" alt="No Photo">
                                     </div>
                                 </div>

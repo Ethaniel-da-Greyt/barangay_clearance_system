@@ -116,14 +116,15 @@ class ResidentController extends BaseController
             'photo' => $imgPath,
         ];
         $password = $this->request->getPost('password');
-        $new_password = $this->request->getPost('new_password');
+        if (!empty($password)) {
+            $new_password = $this->request->getPost('new_password');
 
-        if(!password_verify($password, $userFind['password']))
-        {
-            return redirect()->back()->with('error', 'Incorrect Old Password');
+            if (!password_verify($password, $userFind['password'])) {
+                return redirect()->back()->with('error', 'Incorrect Old Password');
+            }
+
+            $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
         }
-
-        $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
 
         $user->update($id, $data);
 

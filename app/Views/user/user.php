@@ -2,8 +2,8 @@
 <?php $this->section('title'); ?> Welcome nig <?php $this->endSection(); ?>
 <?php $this->section('home') ?>fw-bold border-bottom border-orange border-2<?php $this->endSection() ?>
 <?php $this->section('body') ?>
-<div class="m-5">
-    <div class="d-flex justify-content-between align-items-center mt-4">
+<div class="mx-5 mt-4">
+    <div class="d-flex justify-content-between align-items-center mt-2">
         <div class="col-3 col-md-3">
             <h4 class="text-warning">Request History</h4>
         </div>
@@ -30,7 +30,7 @@
 
 
         <div class="">
-            <button class="btn btn-orange text-white" data-bs-target="#make_request" data-bs-toggle="modal">
+            <button class="btn btn-orange text-white" data-bs-target="#make_requests" data-bs-toggle="modal">
                 <i class="bi bi-file-earmark-text"></i>
                 Make Request
             </button>
@@ -120,11 +120,11 @@
                                 <?php elseif ($status === 'pending'): ?>
                                     <!-- Pending requests can be updated or canceled -->
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <button class="btn btn-primary btn-sm"
+                                        <!-- <button class="btn btn-primary btn-sm"
                                             style="--bs-btn-padding-y:.25rem; --bs-btn-padding-x:.5rem; --bs-btn-font-size:.75rem;"
                                             data-bs-toggle="modal" data-bs-target="#update_<?= esc($request['request_id']) ?>">
                                             <i class="bi bi-pencil me-2"></i> Update
-                                        </button>
+                                        </button> -->
                                         <button class="ms-2 btn btn-danger btn-sm"
                                             style="--bs-btn-padding-y:.25rem; --bs-btn-padding-x:.5rem; --bs-btn-font-size:.75rem;"
                                             data-bs-toggle="modal" data-bs-target="#cancel_<?= esc($request['request_id']) ?>">
@@ -201,130 +201,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--Make Request Modal-->
-                        <div class="modal fade" id="make_request">
-                            <div class="modal-dialog modal-dialog-centered modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-orange">
-                                        <h4 class="text-white">Make a Request</h4>
-                                        <span class="btn btn-close" data-bs-dismiss="modal"></span>
-                                    </div>
-                                    <form action="/resident/make-request/" method="post" enctype="multipart/form-data">
-                                        <div class="modal-body">
-                                            <div class="mb-2">
-                                                <label for="" class="form-label">Choose Document to Request</label>
-                                                <select name="request_type" id="request_type" class="form-select">
-                                                    <?php foreach ($docs as $d): ?>
-                                                        <option value="<?= $d['document_name'] ?>"><?= $d['document_name'] ?>
-                                                        </option>
-                                                    <?php endforeach ?>
-                                                </select>
-                                            </div>
 
-                                            <div id="requirements" class="mt-2 mb-2 fw-bold ms-3"></div>
-                                            <script>
-                                                const requirementsMap = {
-                                                    "Barangay Certification (Old Resident)": [
-                                                        "Valid ID",
-                                                        "School ID",
-                                                        "Company / Office ID",
-                                                        "Voter's ID",
-                                                        "Fee: P100.00"
-                                                    ],
-                                                    "Community Tax Certificate (CTC)": [
-                                                        "Valid ID",
-                                                        "Latest copy of CTC"
-                                                    ],
-                                                    "Barangay Clearance": [
-                                                        "CTC",
-                                                        "Valid ID",
-                                                        "Fee: P100.00"
-                                                    ],
-                                                    "Barangay Certification (New Resident)": [
-                                                        "CTC",
-                                                        "Valid ID",
-                                                        "Endorsement from Purok Barangay Officials",
-                                                        "Fee: P100.00"
-                                                    ]
-                                                };
-
-                                                function showRequirements() {
-                                                    const select = document.getElementById("request_type");
-                                                    const selectedDoc = select.value;
-                                                    const reqDiv = document.getElementById("requirements");
-
-                                                    if (requirementsMap[selectedDoc]) {
-                                                        const list = requirementsMap[selectedDoc]
-                                                            .map(req => `<li> ${req}</li>`)
-                                                            .join("");
-                                                        reqDiv.innerHTML = `<h5 class="text-danger">Must have one of these:</h5><ul>${list}</ul>`;
-                                                    } else {
-                                                        reqDiv.innerHTML = `<i>No requirements available for this document.</i>`;
-                                                    }
-                                                }
-
-                                                document.getElementById("request_type").addEventListener("change", showRequirements);
-
-                                                showRequirements();
-                                            </script>
-                                            <div class="row mb-2">
-                                                <div class="col-4">
-                                                    <label for="" class="form-label">First Name</label>
-                                                    <input type="text" name="firstname" placeholder="Requestor Firstname"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col-4">
-                                                    <label for="" class="form-label">Last Name</label>
-                                                    <input type="text" name="lastname" placeholder="Requestor LastName"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col-2">
-                                                    <label for="" class="form-label">M.I.<span
-                                                            class="text-secondary">(Optional)</span></label>
-                                                    <input type="text" name="middle_initial" placeholder="Middle Initial"
-                                                        class="form-control">
-                                                </div>
-                                                <div class="col-2">
-                                                    <label for="" class="form-label">Suffix<span
-                                                            class="text-secondary">(Optional)</span></label>
-                                                    <input type="text" name="suffix" placeholder="eg. (Jr., Sr., III)"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                <div class="col-4 mb-2">
-                                                    <label for="" class="form-label">Sex</label>
-                                                    <select name="sex" id="" class="form-select" required>
-                                                        <option value="M">Male</option>
-                                                        <option value="F">Female</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4 mb-2">
-                                                    <label for="" class="form-label">Purok</label>
-                                                    <input type="text" name="purok" placeholder="Requestor's Purok"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col-4 mb-2">
-                                                    <label for="" class="form-label">Contact No.:</label>
-                                                    <input type="text" name="contact_no" placeholder="Contact Number"
-                                                        class="form-control" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="mb-2">
-                                                <label for="" class="form-label">Upload Requirements</label>
-                                                <input type="file" name="photo" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-orange text-white">Submit</button>
-                                            <span class="btn btn-secondary" data-bs-dismiss="modal">Cancel</span>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                         <!--Update Modal-->
                         <div class="modal fade" id="update_<?= esc($request['request_id']) ?>">
                             <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -351,7 +228,7 @@
 
                                             <div id="display_<?= $request['id'] ?>" class="mt-2 mb-2 fw-bold ms-3"></div>
                                             <script>
-                                                (function () {
+                                                (function() {
                                                     const requirements = {
                                                         "Barangay Certification (Old Resident)": [
                                                             "Valid ID",
@@ -462,11 +339,135 @@
                     <?php endforeach ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="10" class="text-center">No Request Found</td>
+                        <td colspan="11" class="text-center">No Request Found</td>
                     </tr>
                 <?php endif ?>
             </tbody>
         </table>
+    </div>
+    <!--Make Request Modal-->
+    <div class="modal fade" id="make_requests">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-orange">
+                    <h4 class="text-white">Make a Request</h4>
+                    <span class="btn btn-close" data-bs-dismiss="modal"></span>
+                </div>
+                <form action="/resident/make-request/" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-2">
+                            <label for="" class="form-label">Choose Document to Request</label>
+                            <select name="request_type" id="request_type" class="form-select">
+                                <?php foreach ($docs as $d): ?>
+                                    <option value="<?= $d['document_name'] ?>"><?= $d['document_name'] ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+
+                        <div id="requirements" class="mt-2 mb-2 fw-bold ms-3"></div>
+                        <script>
+                            const requirementsMap = {
+                                "Barangay Certification (Old Resident)": [
+                                    "Valid ID",
+                                    "School ID",
+                                    "Company / Office ID",
+                                    "Voter's ID",
+                                    "Fee: P100.00"
+                                ],
+                                "Community Tax Certificate (CTC)": [
+                                    "Valid ID",
+                                    "Latest copy of CTC"
+                                ],
+                                "Barangay Clearance": [
+                                    "CTC",
+                                    "Valid ID",
+                                    "Fee: P100.00"
+                                ],
+                                "Barangay Certification (New Resident)": [
+                                    "CTC",
+                                    "Valid ID",
+                                    "Endorsement from Purok Barangay Officials",
+                                    "Fee: P100.00"
+                                ]
+                            };
+
+                            function showRequirements() {
+                                const select = document.getElementById("request_type");
+                                const selectedDoc = select.value;
+                                const reqDiv = document.getElementById("requirements");
+
+                                if (requirementsMap[selectedDoc]) {
+                                    const list = requirementsMap[selectedDoc]
+                                        .map(req => `<li> ${req}</li>`)
+                                        .join("");
+                                    reqDiv.innerHTML = `<h5 class="text-danger">Must have one of these:</h5><ul>${list}</ul>`;
+                                } else {
+                                    reqDiv.innerHTML = `<i>No requirements available for this document.</i>`;
+                                }
+                            }
+
+                            document.getElementById("request_type").addEventListener("change", showRequirements);
+
+                            showRequirements();
+                        </script>
+                        <div class="row mb-2">
+                            <div class="col-4">
+                                <label for="" class="form-label">First Name</label>
+                                <input type="text" name="firstname" placeholder="Requestor Firstname"
+                                    class="form-control" required>
+                            </div>
+                            <div class="col-4">
+                                <label for="" class="form-label">Last Name</label>
+                                <input type="text" name="lastname" placeholder="Requestor LastName"
+                                    class="form-control" required>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">M.I.<span
+                                        class="text-secondary">(Optional)</span></label>
+                                <input type="text" name="middle_initial" placeholder="Middle Initial"
+                                    class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Suffix<span
+                                        class="text-secondary">(Optional)</span></label>
+                                <input type="text" name="suffix" placeholder="eg. (Jr., Sr., III)"
+                                    class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-4 mb-2">
+                                <label for="" class="form-label">Sex</label>
+                                <select name="sex" id="" class="form-select" required>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-4 mb-2">
+                                <label for="" class="form-label">Purok</label>
+                                <input type="text" name="purok" placeholder="Requestor's Purok"
+                                    class="form-control" required>
+                            </div>
+                            <div class="col-4 mb-2">
+                                <label for="" class="form-label">Contact No.:</label>
+                                <input type="text" name="contact_no" placeholder="Contact Number"
+                                    class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="form-label">Upload Requirements</label>
+                            <input type="file" name="photo" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-orange text-white">Submit</button>
+                        <span class="btn btn-secondary" data-bs-dismiss="modal">Cancel</span>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <?php $this->endSection() ?>
