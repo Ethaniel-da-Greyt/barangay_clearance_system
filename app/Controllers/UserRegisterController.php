@@ -175,6 +175,68 @@ class UserRegisterController extends BaseController
         return $prefix . '-' . $newNumber;
     }
 
+    public function signup()
+    {
+        $validation = Services::validation();
+
+        $rules = [
+            'firstname' => 'required',
+            'middle_initial' => 'permit_empty',
+            'lastname' => 'required',
+            'sex' => 'required',
+            'purok' => 'required',
+            'username' => 'required|min_length[3]|max_length[20]|is_unique[users.username]',
+            'password' => 'required|min_length[6]',
+            'photo' => 'permit_empty|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]|max_size[photo,2048]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $userId = $this->UserId();
+
+        $uploadPath = 'uploads/avatar/' . $userId . '/';
+        $fullPath = FCPATH . $uploadPath;
+
+        if (!is_dir($fullPath)) {
+            mkdir($fullPath, 0777, true);
+        }
+
+        $img = $this->request->getFile('photo');
+
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            $imgName = $img->getRandomName();
+            $img->move($fullPath, $imgName);
+            $newPath = $uploadPath . $imgName;
+
+            // delete old photo if it exists and is not the same as new one
+            if (!empty($imgPath) && file_exists(FCPATH . $imgPath)) {
+                unlink(FCPATH . $imgPath);
+            }
+
+            $imgPath = $newPath;
+        }
+
+        $data = [
+            'user_id' => $userId,
+            'firstname' => $this->request->getPost('firstname'),
+            'middle_initial' => $this->request->getPost('middle_initial'),
+            'lastname' => $this->request->getPost('lastname'),
+            'sex' => $this->request->getPost('sex'),
+            'purok' => $this->request->getPost('purok'),
+            'username' => $this->request->getPost('username'),
+            'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+            'photo' => $imgPath,
+        ];
+
+        $user = new RegisterUserModel();
+        $user->save($data);
+
+        return redirect()->to('/')
+            ->with('success',  'SignUp Successfully, You can now Login!');
+    }
+
     public function defaultPassword()
     {
         try {

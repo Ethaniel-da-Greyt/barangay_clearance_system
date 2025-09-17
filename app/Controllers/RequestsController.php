@@ -157,6 +157,7 @@ class RequestsController extends BaseController
         }
     }
 
+    //RESIDENT ACTION
     public function reSubmit()
     {
         try {
@@ -178,6 +179,7 @@ class RequestsController extends BaseController
         }
     }
 
+    //RESIDENT ACTION
     public function cancel()
     {
         try {
@@ -197,7 +199,7 @@ class RequestsController extends BaseController
         }
     }
 
-    // Approve Requests
+    // Approve Requests ADMIN
     public function approve()
     {
         try {
@@ -224,14 +226,14 @@ class RequestsController extends BaseController
                 return redirect()->back()->with('error', 'Failed to Approve the request');
             }
 
-            return redirect()->back()->with('success', $request_find['request_id'] . ' Request Approved');
+            return redirect()->to('/admin/requests')->with('success', $request_find['request_id'] . ' Request Approved');
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
 
-    //Reject Request
+    //Reject Request ADMIN
     public function reject()
     {
         try {
@@ -258,7 +260,7 @@ class RequestsController extends BaseController
                 return redirect()->back()->with('error', 'Failed to Reject the request');
             }
 
-            return redirect()->back()->with('success', $request_find['request_id'] . ' Request Rejected');
+            return redirect()->to('/admin/requests')->with('success', $request_find['request_id'] . ' Request Rejected');
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

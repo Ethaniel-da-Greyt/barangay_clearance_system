@@ -64,7 +64,7 @@ class UserRegister extends Migration
         //     ],
         //     'created_at'       => [
         //         'type' => 'DATETIME',
-        //         'null' => true,
+        //         'null' => false,
         //     ],
         //     'updated_at'       => [
         //         'type' => 'DATETIME',

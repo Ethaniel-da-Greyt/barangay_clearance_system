@@ -20,7 +20,7 @@ class Home extends BaseController
 
         $requests = $requestModel->where('status', 'pending')
                                  ->where('is_deleted', 0)
-                                 ->where('is_canceled', 0)->findAll();
+                                 ->where('is_canceled', 0)->orderBy('DATE(created_at)', 'dsc')->findAll();
 
         $currentYear = date("Y");
         $data = [
@@ -45,7 +45,7 @@ class Home extends BaseController
 
 
         $query = $model->where('is_deleted', 0)
-            ->where('is_canceled', 0);
+            ->where('is_canceled', 0)->orderBy('id', 'dsc');
 
 
         if (empty($search) && empty($document)) {
