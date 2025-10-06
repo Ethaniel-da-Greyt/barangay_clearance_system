@@ -79,7 +79,7 @@ class ResidentController extends BaseController
 
         $userFind = $user->where('id', $id)->first();
         if (!$userFind) {
-            return redirect()->back()->with('error', 'User not found.');
+            return redirect()->back()->withInput()->with('error', 'User not found.');
         }
 
         $userId = $userFind['user_id'];
@@ -128,7 +128,7 @@ class ResidentController extends BaseController
 
         $user->update($id, $data);
 
-        return redirect()->back()->with('success', $data['firstname'] . ' updated successfully!');
+        return redirect()->back()->withInput()->with('success', $data['firstname'] . ' updated successfully!');
     }
 
 

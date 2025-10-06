@@ -70,15 +70,18 @@
                                     echo esc($doc['document_name']);
                                 } else {
                                     echo '-';
-                                };
+                                }
+                                ;
                                 ?>
                             </td>
-                            <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?></td>
+                            <td><?= esc($request['firstname'] . " " . $request['middle_initial'] . " " . $request['lastname'] . " " . $request['suffix']) ?>
+                            </td>
                             <td><?= esc($request['sex']) ?></td>
                             <td><?= esc($request['purok']) ?></td>
                             <td><?= esc($request['contact_no']) ?></td>
                             <td>
-                                <button class="btn btn-light btn-sm border border-1" data-bs-target="#img_<?= $request['request_id'] ?>" data-bs-toggle="modal">View</button>
+                                <button class="btn btn-light btn-sm border border-1"
+                                    data-bs-target="#img_<?= $request['request_id'] ?>" data-bs-toggle="modal">View</button>
                             </td>
                             <td>P<?= esc(number_format($doc['fee'], 2)) ?></td>
                             <?php
@@ -91,6 +94,9 @@
                                 case 'approved':
                                     $color = 'success';
                                     break;
+                                case 'claimed':
+                                    $color = 'secondary';
+                                    break;
                                 case 'rejected':
                                     $color = 'danger';
                                     break;
@@ -98,30 +104,49 @@
                             ?>
                             <td><span class="badge text-bg-<?= $color ?> text-white"><?= ucfirst($status) ?></span></td>
                             <td><?php
-                                if ($status !== 'rejected' && $status !== 'approved'): ?>
+                            switch ($status):
+                                case 'pending': ?>
+                                        <div class="d-flex justify-content-center">
+                                            <button class="btn btn-success btn-sm"
+                                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                data-bs-toggle="modal" data-bs-target="#approve_<?= esc($request['request_id']) ?>">
+                                                <i class="bi bi-check-circle me-2"></i>
+                                                Approve
+                                            </button>
 
-                                    <div class="d-flex justify-content-center">
-                                        <button class="btn btn-success btn-sm"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                                            data-bs-toggle="modal" data-bs-target="#approve_<?= esc($request['request_id']) ?>">
-                                            <i class="bi bi-check-circle me-2"></i>
-                                            Approve
-                                        </button>
+                                            <button class="ms-2 btn btn-danger btn-sm"
+                                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                data-bs-toggle="modal" data-bs-target="#reject_<?= esc($request['request_id']) ?>">
+                                                <i class="bi bi-x-circle me-2"></i>
+                                                Reject
+                                            </button>
+                                        </div>
+                                        <?php break; ?>
 
-                                        <button class="ms-2 btn btn-danger btn-sm"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                                            data-bs-toggle="modal" data-bs-target="#reject_<?= esc($request['request_id']) ?>">
-                                            <i class="bi bi-x-circle me-2"></i>
-                                            Reject
-                                        </button>
-                                    </div>
+                                    <?php case 'approved': ?>
+                                        <div class="d-flex justify-content-center">
+                                            <button class="btn btn-warning text-white btn-sm"
+                                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                data-bs-toggle="modal" data-bs-target="#claim_<?= esc($request['request_id']) ?>">
+                                                <i class="bi bi-check-circle me-2"></i>
+                                                Claim
+                                            </button>
+                                        </div>
+                                        <?php break; ?>
 
-                                <?php else: ?>
-                                    <div class="text-center">
-                                        <span class="badge text-bg-dark px-4">None</span>
-                                    </div>
-                                <?php endif ?>
+                                    <?php case 'rejected': ?>
+                                        <div class="text-center">
+                                            <span class="badge text-bg-dark px-4">None</span>
+                                        </div>
+                                        <?php break; ?>
+                                        
+                                        <?php default: ?>
+                                        <div class="text-center">
+                                            <span class="badge text-bg-dark px-4">None</span>
+                                        </div>
+                                <?php endswitch; ?>
                             </td>
+
                         </tr>
 
                         <!--View Requirement Modal-->
@@ -149,12 +174,34 @@
                                         <span class="btn btn-close" data-bs-dismiss="modal"></span>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="fs-3 text-center text-success">Are you sure you want to approve this request?</p>
+                                        <p class="fs-3 text-center text-success">Are you sure you want to approve this request?
+                                        </p>
                                     </div>
                                     <div class="modal-footer">
                                         <form action="/admin/requests/approve" method="POST">
                                             <input type="hidden" name="id" value="<?= $request['id'] ?>">
                                             <button class="btn btn-success">Approve</button>
+                                        </form>
+                                        <div class="btn btn-secondary" data-bs-dismiss="modal">Cancel</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="claim_<?= esc($request['request_id']) ?>">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-warning">
+                                        <h4 class="text-white">Confirmation</h4>
+                                        <span class="btn btn-close" data-bs-dismiss="modal"></span>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="fs-3 text-center text-warning">Are you sure the request was claimed?
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="/admin/requests/claim" method="POST">
+                                            <input type="hidden" name="id" value="<?= $request['id'] ?>">
+                                            <button class="btn btn-warning text-white">Claimed?</button>
                                         </form>
                                         <div class="btn btn-secondary" data-bs-dismiss="modal">Cancel</div>
                                     </div>
@@ -170,7 +217,8 @@
                                         <span class="btn btn-close" data-bs-dismiss="modal"></span>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="fs-3 text-center text-danger">Are you sure you want to reject this request?</p>
+                                        <p class="fs-3 text-center text-danger">Are you sure you want to reject this request?
+                                        </p>
                                     </div>
                                     <div class="modal-footer">
                                         <form action="/admin/requests/reject" method="POST">

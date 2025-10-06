@@ -38,7 +38,8 @@
                         <a href="/resident" class="nav-link text-white <?= $this->renderSection('home') ?>">Home</a>
                     </div>
                     <div class="">
-                        <a href="/resident/profile" class="nav-link text-white <?= $this->renderSection('profile') ?>">Profile</a>
+                        <a href="/resident/profile"
+                            class="nav-link text-white <?= $this->renderSection('profile') ?>">Profile</a>
                     </div>
                 </ul>
             </div>
@@ -53,7 +54,7 @@
 
     <?php if (session()->getFlashdata('success')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -66,7 +67,7 @@
 
     <?php if (session()->getFlashdata('error')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -83,12 +84,22 @@
                 .then(data => {
                     if (data.length > 0) {
                         data.forEach(req => {
+                            let message = '';
+
+                            if (req.status === 'approved') {
+                                message = `Your request ${req.request_type} has been approved. You can now claim your request at the Barangay Dicayas Office.`;
+                            } else if (req.status === 'rejected') {
+                                message = `Your request ${req.request_type} has been rejected.`;
+                            } else {
+                                message = `Your request ${req.request_type} has been ${req.status}.`;
+                            }
+
                             Swal.fire({
                                 icon: req.status === 'approved' ? 'success' : 'error',
-                                title: req.status === 'approved' ? 'Request Approved!' : 'Request Rejected',
-                                text: `Your request ${req.request_type} has been ${req.status}.`,
-                                // timer: 4000,
+                                title: req.status === 'approved' ? 'Request Approved!' : 'Request Rejected!',
+                                text: message,
                                 showConfirmButton: true
+                                // timer: 4000 // optional auto-close
                             }).then(result => {
                                 if (result.isConfirmed) {
                                     location.reload();
@@ -103,6 +114,7 @@
         // Poll every 5 seconds
         setInterval(checkNotifications, 5000);
     </script>
+
     <script src="<?= base_url('sweetalert/sweetalert2.min.js') ?>"></script>
     <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
 </body>

@@ -15,8 +15,9 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     $routes->get( '/admin/requests', 'Home::requests');
     $routes->post('/admin/requests/approve', 'RequestsController::approve');
     $routes->post('/admin/requests/reject', 'RequestsController::reject');
+    $routes->post('/admin/requests/claim', 'RequestsController::claim');
 
-    //Residents Act/admin/ions
+    //Residents Actions
     $routes->get( '/admin/residents', 'Home::residence');
     $routes->post('/admin/residents/add', 'UserRegisterController::store');
     $routes->post('/admin/residents/update', 'UserRegisterController::update');
@@ -30,7 +31,7 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('/admin/population/delete', 'PopulationController::delete');
 
 
-    //Fire Case Inc/admin/ident Actions
+    //Fire Case Incident Actions
     $routes->get('/admin/fire-list', 'Home::fire_list');
     $routes->post('/admin/fire-list', 'FireCaseController::store');
     $routes->post('/admin/fire-list/update', 'FireCaseController::update');

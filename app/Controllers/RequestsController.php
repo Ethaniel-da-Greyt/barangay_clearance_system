@@ -232,6 +232,31 @@ class RequestsController extends BaseController
         }
     }
 
+    public function claim()
+    {
+        try {
+            $reqId = $this->request->getPost('id');
+            $request = new RequestsModel();
+
+            $find = $request->where('id', $reqId)
+                ->where('status', 'approved')
+                ->where('is_deleted', 0)
+                ->find();
+            if (!$find) {
+                return redirect()->back()->with('error', 'Unable to find the request');
+            }
+            $data = [
+                'status' => 'claimed'
+            ];
+            $request->update($reqId, $data);
+
+            return redirect()->to('admin/requests')->with('success', 'Request Claimed');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+
+        }
+    }
+
 
     //Reject Request ADMIN
     public function reject()

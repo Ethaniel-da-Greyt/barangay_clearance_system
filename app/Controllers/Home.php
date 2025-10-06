@@ -19,8 +19,8 @@ class Home extends BaseController
         $documents = new DocumentModel();
 
         $requests = $requestModel->where('status', 'pending')
-                                 ->where('is_deleted', 0)
-                                 ->where('is_canceled', 0)->orderBy('DATE(created_at)', 'dsc')->findAll();
+            ->where('is_deleted', 0)
+            ->where('is_canceled', 0)->orderBy('DATE(created_at)', 'dsc')->findAll();
 
         $currentYear = date("Y");
         $data = [
@@ -49,20 +49,23 @@ class Home extends BaseController
 
 
         if (empty($search) && empty($document)) {
-
             if (empty($status)) {
-                $status = 'pending';
+                $status = ['pending', 'approved'];
             }
 
-            $query->where('status', $status);
+            if (is_array($status)) {
+                $query->whereIn('status', $status);
+            } else {
+                $query->where('status', $status);
+            }
         }
 
-
+        // ✅ FIX 2: Correctly filter by document type
         if (!empty($document)) {
             $query->where('request_type', $document);
         }
 
-
+        // ✅ FIX 3: Add search filters correctly using groupStart/groupEnd
         if (!empty($search)) {
             $query->groupStart()
                 ->like('firstname', $search)
@@ -74,7 +77,7 @@ class Home extends BaseController
                 ->groupEnd();
         }
 
-
+        // ✅ FIX 4: Correct sort direction 'desc' instead of 'dsc'
         $requests = $query->orderBy('id', 'desc')->paginate(10);
         $pager = $model->pager;
 
