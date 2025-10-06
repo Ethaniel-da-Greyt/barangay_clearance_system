@@ -85,11 +85,12 @@
                     if (data.length > 0) {
                         data.forEach(req => {
                             let message = '';
+                            let rejectmsg = req.rejection_remarks;
 
                             if (req.status === 'approved') {
                                 message = `Your request ${req.request_type} has been approved. You can now claim your request at the Barangay Dicayas Office.`;
                             } else if (req.status === 'rejected') {
-                                message = `Your request ${req.request_type} has been rejected.`;
+                                message = `Your request ${req.request_type} has been rejected. ${rejectmsg}`;
                             } else {
                                 message = `Your request ${req.request_type} has been ${req.status}.`;
                             }

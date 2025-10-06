@@ -130,8 +130,10 @@ CREATE TABLE `requests` (
   `photo` text DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL,
+  `claimed_at` datetime DEFAULT NULL,
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
   `status` enum('approved','pending','rejected','claimed') DEFAULT 'pending',
+  `rejection_remarks` text NULL,
   `is_canceled` tinyint(1) DEFAULT 0,
   `notified` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

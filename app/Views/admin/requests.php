@@ -139,8 +139,8 @@
                                             <span class="badge text-bg-dark px-4">None</span>
                                         </div>
                                         <?php break; ?>
-                                        
-                                        <?php default: ?>
+
+                                    <?php default: ?>
                                         <div class="text-center">
                                             <span class="badge text-bg-dark px-4">None</span>
                                         </div>
@@ -187,6 +187,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Claim Modal -->
                         <div class="modal fade" id="claim_<?= esc($request['request_id']) ?>">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -213,17 +214,21 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header bg-danger">
-                                        <h4 class="text-white">Confirmation Rejection</h4>
+                                        <h4 class="text-white text-center">Confirmation</h4>
                                         <span class="btn btn-close" data-bs-dismiss="modal"></span>
                                     </div>
                                     <div class="modal-body">
                                         <p class="fs-3 text-center text-danger">Are you sure you want to reject this request?
                                         </p>
+                                        <form action="/admin/requests/reject" method="POST">
+                                        <div class="mt-3">
+                                            <label for="" class="form-label">Remarks on Rejection</label>
+                                            <textarea type="text" name="remarks" placeholder="Reason for the rejection" class="form-control"></textarea>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <form action="/admin/requests/reject" method="POST">
-                                            <input type="hidden" name="id" value="<?= $request['id'] ?>">
-                                            <button class="btn btn-danger">Reject</button>
+                                        <input type="hidden" name="id" value="<?= $request['id'] ?>">
+                                        <button class="btn btn-danger">Reject</button>
                                         </form>
                                         <div class="btn btn-secondary" data-bs-dismiss="modal">Cancel</div>
                                     </div>

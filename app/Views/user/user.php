@@ -228,7 +228,7 @@
 
                                             <div id="display_<?= $request['id'] ?>" class="mt-2 mb-2 fw-bold ms-3"></div>
                                             <script>
-                                                (function() {
+                                                (function () {
                                                     const requirements = {
                                                         "Barangay Certification (Old Resident)": [
                                                             "Valid ID",
@@ -355,6 +355,10 @@
                 </div>
                 <form action="/resident/make-request/" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
+                        <div class="">
+                            <p> <strong class="text-warning">Note:</strong> You can make up to <strong>3 requests</strong> per day.</p>
+                        </div>
+                        <hr>
                         <div class="mb-2">
                             <label for="" class="form-label">Choose Document to Request</label>
                             <select name="request_type" id="request_type" class="form-select">
@@ -419,8 +423,8 @@
                             </div>
                             <div class="col-4">
                                 <label for="" class="form-label">Last Name</label>
-                                <input type="text" name="lastname" placeholder="Requestor LastName"
-                                    class="form-control" required>
+                                <input type="text" name="lastname" placeholder="Requestor LastName" class="form-control"
+                                    required>
                             </div>
                             <div class="col-2">
                                 <label for="" class="form-label">M.I.<span
@@ -431,8 +435,7 @@
                             <div class="col-2">
                                 <label for="" class="form-label">Suffix<span
                                         class="text-secondary">(Optional)</span></label>
-                                <input type="text" name="suffix" placeholder="eg. (Jr., Sr., III)"
-                                    class="form-control">
+                                <input type="text" name="suffix" placeholder="eg. (Jr., Sr., III)" class="form-control">
                             </div>
                         </div>
 
@@ -446,13 +449,13 @@
                             </div>
                             <div class="col-4 mb-2">
                                 <label for="" class="form-label">Purok</label>
-                                <input type="text" name="purok" placeholder="Requestor's Purok"
-                                    class="form-control" required>
+                                <input type="text" name="purok" placeholder="Requestor's Purok" class="form-control"
+                                    required>
                             </div>
                             <div class="col-4 mb-2">
                                 <label for="" class="form-label">Contact No.:</label>
-                                <input type="text" name="contact_no" placeholder="Contact Number"
-                                    class="form-control" required>
+                                <input type="text" name="contact_no" placeholder="Contact Number" class="form-control"
+                                    required>
                             </div>
                         </div>
 

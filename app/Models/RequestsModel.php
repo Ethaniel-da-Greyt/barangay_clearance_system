@@ -27,6 +27,8 @@ class RequestsModel extends Model
         'status',
         'is_deleted',
         'is_canceled',
+        'claimed_at',
+        'rejection_remarks',
         'notified',
 
     ];

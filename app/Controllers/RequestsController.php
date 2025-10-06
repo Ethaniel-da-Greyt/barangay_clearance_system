@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\RequestsModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\I18n\Time;
 use Config\Services;
 use Exception;
 
@@ -39,7 +40,7 @@ class RequestsController extends BaseController
                 ->where('requestor_id', $requestor_id)
                 ->countAllResults();
             if ($request >= 3) {
-                return redirect()->back()->with('error', 'You have reached the maximum of 3 requests for today.');
+                return redirect()->to('/resident')->with('error', 'You have reached the maximum of 3 requests for today.');
             }
 
             $user_id = $requestor_id;
@@ -241,12 +242,13 @@ class RequestsController extends BaseController
             $find = $request->where('id', $reqId)
                 ->where('status', 'approved')
                 ->where('is_deleted', 0)
-                ->find();
+                ->first();
             if (!$find) {
-                return redirect()->back()->with('error', 'Unable to find the request');
+                return redirect()->back()->with('error', 'Unable to find the approved request');
             }
             $data = [
-                'status' => 'claimed'
+                'status' => 'claimed',
+                'claimed_at' => Time::now('Asia/Manila', 'en_US')->toDateTimeString()
             ];
             $request->update($reqId, $data);
 
@@ -263,7 +265,7 @@ class RequestsController extends BaseController
     {
         try {
             $id = $this->request->getPost('id');
-
+            $remarks = $this->request->getPost('remarks');
             $request = new RequestsModel();
             $request_find = $request->where('id', $id)
                 ->where('is_deleted', 0)
@@ -276,6 +278,7 @@ class RequestsController extends BaseController
 
             $data = [
                 'status' => 'rejected',
+                'rejection_remarks' => $remarks,
                 'notified' => 0
             ];
 
