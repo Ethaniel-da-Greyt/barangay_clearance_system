@@ -37,6 +37,10 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('/admin/fire-list/update', 'FireCaseController::update');
     $routes->post('/admin/fire-list/delete', 'FireCaseController::delete');
 
+    //View Reports
+    $routes->get('/admin/view-reports', 'Home::viewReport');
+    $routes->get('/admin/generate-reports', 'PdfMakerController::index');
+
 });
 
 $routes->group('', ['filter' => 'role:resident'], function($routes){

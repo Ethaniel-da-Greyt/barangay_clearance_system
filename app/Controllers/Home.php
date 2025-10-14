@@ -50,7 +50,7 @@ class Home extends BaseController
 
         if (empty($search) && empty($document)) {
             if (empty($status)) {
-                $status = ['pending', 'approved'];
+                $status = ['pending', 'approved', 'claimed'];
             }
 
             if (is_array($status)) {
@@ -207,5 +207,40 @@ class Home extends BaseController
             'selectedYear' => $selectedYear,
             'years' => $years
         ]);
+    }
+
+    public function viewReport()
+    {
+        $requests = new RequestsModel();
+
+        $filter = $this->request->getGet('month');
+
+        
+        if (!empty($filter)) {
+            [$year, $months] = explode('-', $filter);
+            $list = $requests->where('status', 'claimed')
+                ->where('is_deleted', 0)
+                ->where('Year(created_at)', $year)
+                ->where('MONTH(created_at)', $months)
+                ->findAll();
+
+        } else {
+            $list = $requests->where('status', 'claimed')->where('is_deleted', 0)->findAll();
+        }
+
+        $groupByMonth = [];
+
+        foreach ($list as $l) {
+            $month = date('Y-m', strtotime($l['created_at']));
+
+            if (!isset($groupByMonth[$month])) {
+                $groupByMonth[$month] = [];
+            }
+
+            $groupByMonth[$month][] = $l;
+        }
+
+
+        return view('admin/reports', ['lists' => $groupByMonth]);
     }
 }

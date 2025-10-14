@@ -32,6 +32,7 @@
                 <select name="filter" id="" onchange="this.form.submit()" class="form-select">
                     <option class="text-center" value="">Choose Status</option>
                     <option value="approved">Aprroved/Done</option>
+                    <option value="claimed">Claimed</option>
                     <option value="rejected">Rejected</option>
                     <option value="pending">Pending</option>
                 </select>

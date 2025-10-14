@@ -50,6 +50,9 @@
                         <a class="nav-link <?= $this->renderSection('fire_list') ?> text-white" href="/admin/fire-list">List of Fire
                             Incidents</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $this->renderSection('reports') ?> text-white" href="/admin/view-reports">Reports</a>
+                    </li>
                 </ul>
             </div>
         </div>
