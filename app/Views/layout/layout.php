@@ -34,24 +34,34 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item me-4 ms-5">
-                        <a class="nav-link <?= $this->renderSection('dashboard') ?> text-white" aria-current="page" href="/admin">Dashboard</a>
+                    <li class="nav-item me-2 ms-3">
+                        <a class="nav-link <?= $this->renderSection('dashboard') ?> text-white" aria-current="page"
+                            href="/admin">Dashboard</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link <?= $this->renderSection('requests') ?> text-white" href="/admin/requests">Requests</a>
+                        <a class="nav-link <?= $this->renderSection('requests') ?> text-white"
+                            href="/admin/requests">Requests</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link <?= $this->renderSection('residents') ?> text-white" href="/admin/residents">Registered Residents</a>
+                        <a class="nav-link <?= $this->renderSection('residents') ?> text-white"
+                            href="/admin/residents">Registered Residents</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link <?= $this->renderSection('population') ?> text-white" href="/admin/population">Population</a>
+                        <a class="nav-link <?= $this->renderSection('population') ?> text-white"
+                            href="/admin/population">Population</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $this->renderSection('fire_list') ?> text-white" href="/admin/fire-list">List of Fire
+                        <a class="nav-link <?= $this->renderSection('fire_list') ?> text-white"
+                            href="/admin/fire-list">List of Fire
                             Incidents</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $this->renderSection('reports') ?> text-white" href="/admin/view-reports">Reports</a>
+                        <a class="nav-link <?= $this->renderSection('reports') ?> text-white"
+                            href="/admin/view-reports">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $this->renderSection('register') ?> text-white"
+                            href="/admin/register">Register ESP</a>
                     </li>
                 </ul>
             </div>
@@ -66,7 +76,7 @@
 
     <?php if (session()->getFlashdata('success')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -79,7 +89,7 @@
 
     <?php if (session()->getFlashdata('error')): ?>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -92,6 +102,48 @@
 
     <script src="<?= base_url('sweetalert/sweetalert2.min.js') ?>"></script>
     <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
+
+    <script>
+        function checkFireNotifications() {
+            fetch('/admin/check-fire-notifications') // your route to the PHP method
+                .then(res => res.json())
+                .then(data => {
+                    // Ensure data format is valid
+                    if (data.status === 200 && data.notifications && data.notifications.length > 0) {
+                        data.notifications.forEach(fire => {
+                            let message =
+                                `🔥 FIRE ALERT DETECTED!
+
+                                📍 Location: ${fire.exact_location || 'Unknown'}
+                                                        
+                                🏠 Household: ${fire.household || 'N/A'}
+                                                        
+                                ⚠️ Alert Level: ${fire.status ? fire.status.toUpperCase() : 'N/A'}
+                                `;
+                                                        
+
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Fire Case Alert',
+                                text: message,
+                                confirmButtonText: 'Acknowledge',
+                                confirmButtonColor: '#d33',
+                            }).then(result => {
+                                if (result.isConfirmed) {
+                                    // Optional: refresh data or UI after acknowledgement
+                                    location.reload();
+                                }
+                            });
+                        });
+                    }
+                })
+                .catch(err => console.error('Error checking fire notifications:', err));
+        }
+
+        // Poll every 5 seconds
+        setInterval(checkFireNotifications, 5000);
+    </script>
+
 </body>
 
 </html>

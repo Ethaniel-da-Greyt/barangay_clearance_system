@@ -48,10 +48,11 @@
                     <th>Date Reported</th>
                     <th>Exact Location</th>
                     <th>Cause of Fire</th>
-                    <th>Affected Households</th>
+                    <th>Household</th>
                     <th>Type of Occurancy</th>
                     <th>Casualties</th>
-                    <th>Affected Individuals</th>
+                    <th>Status</th>
+                    <th>Alarm</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -68,10 +69,11 @@
                                 <td><?= esc(date("F, d, Y - h:i A", strtotime($case['date_report']))) ?></td>
                                 <td><?= esc($case['exact_location']) ?></td>
                                 <td><?= esc($case['cause_of_fire']) ?></td>
-                                <td><?= esc($case['affected_households']) ?></td>
+                                <td><?= esc($case['household']) ?></td>
                                 <td><?= esc($case['type_of_occupancy']) ?></td>
                                 <td><?= esc($case['casualties']) ?></td>
-                                <td><?= esc($case['affected_individuals']) ?></td>
+                                <td><span class="badge bg-<?= $case['status'] == 'warning' ? 'warning' : 'danger' ?>"><?= esc(ucfirst($case['status'])) ?></span></td>
+                                <td><?= esc($case['alarm']) ?></td>
                                 <td>
                                     <div class="d-flex justify-content-center">
                                         <button class="btn btn-primary btn-sm"
@@ -178,14 +180,14 @@
                             </div>
                         <?php endforeach; ?>
                         <tr>
-                            <td colspan="11">
+                            <td colspan="12">
                                 <span class="text-primary fw-bold">Fire Case Incidents (<?= esc($year) ?>)</span>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="11" class="text-center">No Record Found</td>
+                        <td colspan="12" class="text-center">No Record Found</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

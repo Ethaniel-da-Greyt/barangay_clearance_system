@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\DocumentModel;
+use App\Models\EspSystem;
 use App\Models\FireCaseModel;
 use App\Models\PopulationModel;
 use App\Models\RegisterUserModel;
@@ -207,6 +208,15 @@ class Home extends BaseController
             'selectedYear' => $selectedYear,
             'years' => $years
         ]);
+    }
+
+    public function viewRegister()
+    {
+        $model = new EspSystem();
+        
+        $systems = $model->where('is_deleted', 0)->findAll();
+
+        return view('admin/register_system', ['system' => $systems]);
     }
 
     public function viewReport()

@@ -40,6 +40,14 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     //View Reports
     $routes->get('/admin/view-reports', 'Home::viewReport');
     $routes->get('/admin/generate-reports', 'PdfMakerController::index');
+    
+    // Register ESP
+    $routes->get('/admin/register', 'Home::viewRegister');
+    $routes->get('/admin/update-system', '::viewRegister');
+
+    //Send Alert in web
+    // $routes->get('/admin/send-alert', 'RegisterESP::makeAlert');
+    $routes->get('admin/check-fire-notifications', 'FireCaseController::checkFireNotifications');
 
 });
 
@@ -63,3 +71,6 @@ $routes->get('/login', 'LoginController::index');
 $routes->post('/login', 'LoginController::login');
 $routes->post('/signup', 'UserRegisterController::signup');
 
+
+$routes->post('api/register', 'RegisterESP::registerESP');
+$routes->post('api/make-alert', 'RegisterESP::makeAlert');

@@ -22,7 +22,11 @@ class FireCaseModel extends Model
         'type_of_occupancy',
         'casualties',
         'affected_individuals',
+        'household',
         'is_deleted',
+        'alarm',
+        'status',
+        'is_notified',
 
     ];
 
